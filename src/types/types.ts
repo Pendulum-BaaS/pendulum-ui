@@ -14,4 +14,9 @@ export interface NavigationBarProps {
   onCollectionChange: (collectionName: string) => void
 };
 
-
+export interface DocumentRowProps {
+  doc: Document,
+  headers: string[];
+  isSelected: boolean;
+  onDocumentSelect: (documentId: string, selected: boolean) => void;
+}
