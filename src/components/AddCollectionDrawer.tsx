@@ -2,32 +2,31 @@ import { useState } from 'react';
 import { Drawer, Button, TextField } from '@mui/material';
 import type { AddDrawerProps } from '../types/types';
 
-const AddDocDrawer = ({ isOpen, toggleDrawer }: AddDrawerProps) => {
-  const [textFieldContent, setTextFieldContent] = useState('[\n  {\n\n  }\n]');
+const AddCollectionDrawer = ({ isOpen, toggleDrawer }: AddDrawerProps) => {
+  const [collectionName, setCollectionName] = useState('');
 
   const handleSubmit = () => toggleDrawer(false); // add functionality
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTextFieldContent(event.target.value);
+    setCollectionName(event.target.value);
   };
 
   return (
     <Drawer open={isOpen} anchor={'right'}>
-      <h2>Add New Documents</h2>
+      <h2>Add New Collection</h2>
       <Button onClick={() => toggleDrawer(false)}>X</Button>
       <form onSubmit={handleSubmit}>
-        <label htmlFor='documentContent'>Document Content (JSON)</label>
+        <label htmlFor='newCollection'>Name</label>
         <TextField
-          id='documentContent'
-          value={textFieldContent}
+          id='newCollection'
+          value={collectionName}
           onChange={handleChange}
-          multiline
         ></TextField>
         <Button variant='outlined' onClick={handleSubmit}>
-          Save Documents
+          Save Collection
         </Button>
       </form>
     </Drawer>
   );
 };
 
-export default AddDocDrawer;
+export default AddCollectionDrawer;

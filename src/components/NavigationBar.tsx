@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { List, Button } from '@mui/material';
+import AddCollectionDrawer from './AddCollectionDrawer';
 import type { NavigationBarProps } from '../types/types';
 
 const NavigationBar = ({
   collections,
   onCollectionChange
 }: NavigationBarProps) => {
-  const handleAddCollection = () => console.log('Adding new collection'); // Do we have this route?
+  const [addCollectionDrawer, setAddCollectionDrawer] = useState(false);
+
+  const handleAddCollection = () => toggleDrawer(true);
+  const toggleDrawer = (newOpen: boolean) => setAddCollectionDrawer(newOpen);
 
   return (
     <nav>
@@ -25,6 +30,10 @@ const NavigationBar = ({
       <Button variant='outlined' onClick={handleAddCollection}>
         Add New Collection
       </Button>
+      <AddCollectionDrawer
+        isOpen={addCollectionDrawer}
+        toggleDrawer={toggleDrawer}
+      ></AddCollectionDrawer>
     </nav>
   );
 };

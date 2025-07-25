@@ -27,12 +27,12 @@ export interface ActionsProps {
   selectedDocuments: string[]
 };
 
-export interface AddDocDrawerProps {
+export interface AddDrawerProps {
   isOpen: boolean,
   toggleDrawer: (newOpen: boolean) => void
 };
 
-export interface EditDrawerProps extends AddDocDrawerProps {
+export interface EditDrawerProps extends AddDrawerProps {
   activeCollection: string,
   selectedDocuments: string[]
 };
