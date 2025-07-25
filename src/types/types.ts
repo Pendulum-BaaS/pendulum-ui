@@ -6,7 +6,8 @@ export interface DocumentTableProps {
   documents: Document[],
   selectedDocuments: string[],
   onDocumentSelect: (documentId: string, selected: boolean) => void,
-  onSelectAll: (selected: boolean) => void
+  onSelectAll: (selected: boolean) => void,
+  activeCollection: string
 };
 
 export interface NavigationBarProps {
@@ -19,4 +20,19 @@ export interface DocumentRowProps {
   headers: string[];
   isSelected: boolean;
   onDocumentSelect: (documentId: string, selected: boolean) => void;
-}
+};
+
+export interface ActionsProps {
+  activeCollection: string,
+  selectedDocuments: string[]
+};
+
+export interface AddDocDrawerProps {
+  isOpen: boolean,
+  toggleDrawer: (newOpen: boolean) => void
+};
+
+export interface EditDrawerProps extends AddDocDrawerProps {
+  activeCollection: string,
+  selectedDocuments: string[]
+};
