@@ -56,6 +56,7 @@ const Data = () => {
           selectedDocuments={selectedDocuments}
           onDocumentSelect={handleDocumentSelect}
           onSelectAll={handleSelectAll}
+          activeCollection={activeCollection}
         ></DocumentTable> :
         ''
       }

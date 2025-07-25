@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import DocumentRow from './DocumentRow';
+import Actions from './Actions';
 import {
   TableContainer,
   Table,
@@ -16,7 +17,8 @@ const DocumentTable = ({
   documents,
   selectedDocuments,
   onDocumentSelect,
-  onSelectAll
+  onSelectAll,
+  activeCollection
 }: DocumentTableProps) => {
   const headers = useMemo(() => {
     const allKeys = new Set<string>();
@@ -32,56 +34,42 @@ const DocumentTable = ({
 
   if (documents.length > 0) {
     return (
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Checkbox
-                  checked={allSelected}
-                  onChange={() => onSelectAll(!allSelected)}
-                ></Checkbox>
-              </TableCell>
-              {headers.map(header => {
-                return <TableCell key={header}>{header}</TableCell>
+      <>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Checkbox
+                    checked={allSelected}
+                    onChange={() => onSelectAll(!allSelected)}
+                  ></Checkbox>
+                </TableCell>
+                {headers.map(header => {
+                  return <TableCell key={header}>{header}</TableCell>
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {documents.map(doc => {
+                return (
+                  <DocumentRow
+                    key={doc.id}
+                    doc={doc}
+                    headers={headers}
+                    isSelected={selectedDocuments.includes(doc.id)}
+                    onDocumentSelect={onDocumentSelect}
+                  ></DocumentRow>
+                )
               })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {documents.map(doc => {
-              return (
-                <DocumentRow
-                  key={doc.id}
-                  doc={doc}
-                  headers={headers}
-                  isSelected={selectedDocuments.includes(doc.id)}
-                  onDocumentSelect={onDocumentSelect}
-                ></DocumentRow>
-              )
-            })}
-            {/* {documents.map(doc => {
-              return (
-                <TableRow key={doc.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedDocuments.includes(doc.id)}
-                      onChange={() => {
-                        onDocumentSelect(
-                          doc.id,
-                          !selectedDocuments.includes(doc.id)
-                        )
-                      }}
-                    ></Checkbox>
-                  </TableCell>
-                  {headers.map(header => {
-                    return <TableCell key={header}>{doc[header]}</TableCell>
-                  })}
-                </TableRow>
-              )
-            })} */}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Actions
+          activeCollection={activeCollection}
+          selectedDocuments={selectedDocuments}
+        ></Actions>
+      </>
     );
   } else {
     return <p>No documents found in this collection</p>

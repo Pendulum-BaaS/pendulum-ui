@@ -5,6 +5,8 @@ const NavigationBar = ({
   collections,
   onCollectionChange
 }: NavigationBarProps) => {
+  const handleAddCollection = () => console.log('Adding new collection'); // Do we have this route?
+
   return (
     <nav>
       <h1>Document Collections</h1>
@@ -20,6 +22,9 @@ const NavigationBar = ({
           )
         })}
       </List>
+      <Button variant='outlined' onClick={handleAddCollection}>
+        Add New Collection
+      </Button>
     </nav>
   );
 };
