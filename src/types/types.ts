@@ -1,3 +1,5 @@
+import type { PendulumClient } from '../../../pendulum-sdk/src/pendulumClient';
+
 export interface Document { id: string, [key: string]: any };
 
 export interface Collection { name: string, documents: Document[] };
@@ -36,3 +38,17 @@ export interface EditDrawerProps extends AddDrawerProps {
   activeCollection: string,
   selectedDocuments: string[]
 };
+
+export interface PendulumContextType {
+  client: PendulumClient,
+  isConnected: boolean
+};
+
+export type MutationOperation =
+  'insert' |
+  'updateOne' |
+  'updateSome' |
+  'updateAll' |
+  'removeOne' |
+  'removeSome' |
+  'removeAll';
