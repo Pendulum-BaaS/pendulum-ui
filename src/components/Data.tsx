@@ -1,67 +1,67 @@
-import { useState } from 'react';
-import { sampleCollections } from '../sample_data/sample_data';
-import NavigationBar from './NavigationBar';
-import DocumentTable from './DocumentTable';
+import { useState, useEffect } from "react";
+import type { PendulumClient } from "../../../pendulum-sdk/src/pendulumClient";
+import { type Document } from "../types/types";
+import { Box } from "@mui/material";
+import CollectionMenu from "./CollectionMenu";
+import DocumentTable from "./DocumentTable";
+import { type GridColDef } from "@mui/x-data-grid";
 
-const Data = () => {
-  const [activeCollection, setActiveCollection] = useState('');
-  const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+function Data({ client }: { client: PendulumClient }) {
+  const [collections, setCollections] = useState<string[]>([
+    "todos",
+    "app-test",
+  ]);
+  const [activeCollection, setActiveCollection] = useState(collections[0]);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [columns, setColumns] = useState<GridColDef[]>([]);
 
-  const selectedQty = selectedDocuments.length;
-  const currentCollection = sampleCollections.find(collection => {
-    return collection.name === activeCollection;
-  });
+  const getAllColumns = (documents: Document[]): GridColDef[] => {
+    const columns = new Set();
 
-  const handleCollectionChange = (collectionName: string) => {
-    setActiveCollection(collectionName);
-    setSelectedDocuments([]);
+    for (const doc of documents) {
+      const keys = Object.keys(doc);
+      keys.forEach((key) => columns.add(key));
+    }
+
+    return [...columns].map((col) => ({
+      field: col as string,
+      headerName: col as string,
+      width: 200,
+    }));
   };
 
-  const handleDocumentSelect = (documentId: string, selected: boolean) => {
-    if (selected) {
-      setSelectedDocuments(selectedDocuments.concat(documentId));
-    } else {
-      setSelectedDocuments(selectedDocuments.filter(doc => {
-        return doc !== documentId;
-      }));
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await client.db.getAll(activeCollection);
+        setColumns(getAllColumns(response.data));
+        setDocuments(response.data);
+      } catch (error) {
+        console.error(error);
+        setDocuments([]);
+      }
     };
-  };
 
-  const handleSelectAll = (selected: boolean) => {
-    if (selected && currentCollection) {
-      setSelectedDocuments(currentCollection.documents.map(({id}) => id));
-    } else {
-      setSelectedDocuments([]);
-    };
-  };
+    fetchDocuments();
+  }, [activeCollection, client]);
 
   return (
-    <>
-      <NavigationBar
-        collections={sampleCollections}
-        onCollectionChange={handleCollectionChange}
-      ></NavigationBar>
-      <h2>{activeCollection}</h2>
-      <div>
-        {
-          selectedQty > 0 ?
-          `${selectedQty} document${selectedQty === 1 ? '' : 's'} selected` :
-          ''
-        }
-      </div>
-      {
-        activeCollection ?
-        <DocumentTable
-          documents={currentCollection ? currentCollection.documents : []}
-          selectedDocuments={selectedDocuments}
-          onDocumentSelect={handleDocumentSelect}
-          onSelectAll={handleSelectAll}
-          activeCollection={activeCollection}
-        ></DocumentTable> :
-        ''
-      }
-    </>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        height: "100%",
+        overflow: "hidden",
+      }}
+    >
+      <CollectionMenu
+        collections={collections}
+        setActiveCollection={setActiveCollection}
+        setCollections={setCollections}
+      />
+      <DocumentTable columns={columns} documents={documents} />
+    </Box>
   );
-};
+}
 
 export default Data;
