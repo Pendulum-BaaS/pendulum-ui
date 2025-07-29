@@ -19,11 +19,20 @@ function App() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
+        overflow: "hidden",
+        margin: 0,
       }}
     >
       <Header />
 
-      <Box sx={{ display: "flex", flex: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flex: 1,
+          overflow: "hidden",
+        }}
+      >
         {sidebarCollapsed ? (
           <CollapsedSidebar expand={() => setSidebarCollapsed(false)} />
         ) : (
@@ -33,17 +42,17 @@ function App() {
         <Box
           component="main"
           sx={{
-            flexGrow: 1,
-            p: 3,
-            marginLeft: sidebarCollapsed ? "64px" : "240px",
-            transition: "margin-left 0.3s ease",
+            flex: 1,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Routes>
             <Route path="/" element={<Navigate to="/data" />}></Route>
-            <Route path="/data" element={<Data />}></Route>
-            <Route path="/users" element={<Users />}></Route>
-            <Route path="/logs" element={<Logs />}></Route>
+            <Route path="/data" element={<Data client={client} />}></Route>
+            <Route path="/users" element={<Users client={client} />}></Route>
+            <Route path="/logs" element={<Logs client={client} />}></Route>
           </Routes>
         </Box>
       </Box>
