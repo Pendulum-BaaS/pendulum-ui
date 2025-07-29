@@ -1,58 +1,54 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link
-} from 'react-router-dom';
+import { PendulumContext } from "./contexts/PendulumProvider";
+import { useContext, useState } from "react";
+import Header from "./components/Header";
+import CollapsedSidebar from "./components/CollapsedSidebar";
+import ExpandedSidebar from "./components/ExpandedSidebar";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Data from "./components/Data";
+import Users from "./components/Users";
+import Logs from "./components/Logs";
+import { Box } from "@mui/material";
 
-import Data from './components/Data';
-import Users from './components/Users';
-import Logs from './components/Logs';
+function App() {
+  const { client } = useContext(PendulumContext);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
 
-import { Button } from '@mui/material';
-import {
-  StorageRounded,
-  PeopleAltRounded,
-  DescriptionRounded
-} from '@mui/icons-material';
-
-const App = () => {
   return (
-    <>
-      <h1>Welcome to your Pendulum Dashboard</h1>
-      <p>Navigate through the different sections using the menu</p>
-      <Router>
-        <Link to='/data'>
-          <Button variant='outlined'>
-            <h2>Data Management</h2>
-            <p>Access & manage your collection data.</p>
-            <StorageRounded></StorageRounded>
-          </Button>
-        </Link>
-        <Link to='/users'>
-          <Button variant='outlined'>
-            <h2>User Management</h2>
-            <p>Manage user permissions & access controls for your app.</p>
-            <PeopleAltRounded></PeopleAltRounded>
-          </Button>
-        </Link>
-        <Link to='/logs'>
-          <Button variant='outlined'>
-            <h2>System Logs</h2>
-            <p>Monitor system activity, track events, & review error logs.</p>
-            <DescriptionRounded></DescriptionRounded>
-          </Button>
-        </Link>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
+    >
+      <Header />
 
-        <Routes>
-          <Route path='/' element={null}></Route>
-          <Route path='/data' element={<Data />}></Route>
-          <Route path='/users' element={<Users />}></Route>
-          <Route path='/logs' element={<Logs />}></Route>
-        </Routes>
-      </Router>
-    </>
-  )
-};
+      <Box sx={{ display: "flex", flex: 1 }}>
+        {sidebarCollapsed ? (
+          <CollapsedSidebar expand={() => setSidebarCollapsed(false)} />
+        ) : (
+          <ExpandedSidebar collapse={() => setSidebarCollapsed(true)} />
+        )}
+
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            marginLeft: sidebarCollapsed ? "64px" : "240px",
+            transition: "margin-left 0.3s ease",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Navigate to="/data" />}></Route>
+            <Route path="/data" element={<Data />}></Route>
+            <Route path="/users" element={<Users />}></Route>
+            <Route path="/logs" element={<Logs />}></Route>
+          </Routes>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
 
 export default App;
