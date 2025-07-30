@@ -1,4 +1,4 @@
-const Logs = () => {
+const Logs = ({ client }: { client: PendulumContextType }) => {
   return <h1>Logs</h1>;
 };
 
