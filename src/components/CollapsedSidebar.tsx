@@ -140,54 +140,6 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
         </Link>
       </List>
 
-      <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)", my: 2 }} />
-
-      <List>
-        <ListItemButton
-          sx={{
-            mx: 0.5,
-            borderRadius: 2,
-            justifyContent: "center",
-            px: 0,
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.08)",
-            },
-          }}
-        >
-          <ListItemIcon
-            sx={{
-              color: "#ffffff",
-              justifyContent: "center",
-              minWidth: "auto",
-            }}
-          >
-            <DescriptionRounded />
-          </ListItemIcon>
-        </ListItemButton>
-        <ListItemButton
-          sx={{
-            mx: 0.5,
-            borderRadius: 2,
-            justifyContent: "center",
-            px: 0,
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.08)",
-            },
-          }}
-        >
-          <ListItemIcon
-            sx={{
-              color: "#ffffff",
-              justifyContent: "center",
-              minWidth: "auto",
-            }}
-          >
-            <PeopleAltRounded />
-          </ListItemIcon>
-        </ListItemButton>
-      </List>
-      <Divider />
-
       <Button
         variant="outlined"
         onClick={expand}

@@ -156,54 +156,6 @@ export default function ExpandedSidebar({
         </Link>
       </List>
 
-      <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)", my: 2 }} />
-
-      <List>
-        <ListItemButton
-          sx={{
-            mx: 1,
-            borderRadius: 2,
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.08)",
-            },
-          }}
-        >
-          <ListItemIcon sx={{ color: "#ffffff" }}>
-            <DescriptionRounded />
-          </ListItemIcon>
-          <ListItemText
-            primary="TBD"
-            sx={{
-              "& .MuiListItemText-primary": {
-                color: "#ffffff",
-                fontWeight: 500,
-              },
-            }}
-          />
-        </ListItemButton>
-        <ListItemButton
-          sx={{
-            mx: 1,
-            borderRadius: 2,
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.08)",
-            },
-          }}
-        >
-          <ListItemIcon sx={{ color: "#ffffff" }}>
-            <PeopleAltRounded />
-          </ListItemIcon>
-          <ListItemText
-            primary="TBD 2.0"
-            sx={{
-              "& .MuiListItemText-primary": {
-                color: "#ffffff",
-                fontWeight: 500,
-              },
-            }}
-          />
-        </ListItemButton>
-      </List>
       <Button
         variant="outlined"
         onClick={collapse}
