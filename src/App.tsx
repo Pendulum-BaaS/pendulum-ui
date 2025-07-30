@@ -142,6 +142,8 @@ function App() {
               <Route path="/data" element={<Data client={client} />}></Route>
               <Route path="/users" element={<Users client={client} />}></Route>
               <Route path="/logs" element={<Logs client={client} />}></Route>
+              {/* TODO: add access component, just displays data tab for now */}
+              <Route path="/access" element={<Data client={client} />}></Route>
             </Routes>
           </Box>
         </Box>
