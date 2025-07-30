@@ -10,7 +10,6 @@ import {
   StorageRounded,
   PeopleAltRounded,
   DescriptionRounded,
-  LockRounded,
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 
@@ -149,43 +148,6 @@ export default function ExpandedSidebar({
                 "& .MuiListItemText-primary": {
                   color: "#ffffff",
                   fontWeight: location.pathname === "/logs" ? 600 : 500,
-                },
-              }}
-            />
-          </ListItemButton>
-        </Link>
-        <Link to="/access" style={{ textDecoration: "none", color: "inherit" }}>
-          <ListItemButton
-            sx={{
-              mx: 1,
-              my: 1,
-              borderRadius: 2,
-              backgroundColor:
-                location.pathname === "/access"
-                  ? "rgba(106, 76, 147, 0.3)"
-                  : "transparent",
-              "&:hover": {
-                backgroundColor:
-                  location.pathname === "/access"
-                    ? "rgba(106, 76, 147, 0.4)"
-                    : "rgba(255, 255, 255, 0.08)",
-              },
-            }}
-            selected={location.pathname === "/access"}
-          >
-            <ListItemIcon
-              sx={{
-                color: location.pathname === "/access" ? "#f39c12" : "#ffffff",
-              }}
-            >
-              <LockRounded />
-            </ListItemIcon>
-            <ListItemText
-              primary="Access"
-              sx={{
-                "& .MuiListItemText-primary": {
-                  color: "#ffffff",
-                  fontWeight: location.pathname === "/access" ? 600 : 500,
                 },
               }}
             />

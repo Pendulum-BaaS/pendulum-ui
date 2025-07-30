@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { Button } from "@mui/material";
@@ -10,7 +9,6 @@ import {
   StorageRounded,
   PeopleAltRounded,
   DescriptionRounded,
-  LockRounded,
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 
@@ -136,39 +134,6 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               }}
             >
               <DescriptionRounded />
-            </ListItemIcon>
-          </ListItemButton>
-        </Link>
-        <Link to="/access" style={{ textDecoration: "none", color: "inherit" }}>
-          <ListItemButton
-            sx={{
-              mx: 1,
-              my: 1,
-              borderRadius: 2,
-              justifyContent: "center",
-              px: 0,
-              minHeight: 48,
-              backgroundColor:
-                location.pathname === "/access"
-                  ? "rgba(106, 76, 147, 0.3)"
-                  : "transparent",
-              "&:hover": {
-                backgroundColor:
-                  location.pathname === "/access"
-                    ? "rgba(106, 76, 147, 0.4)"
-                    : "rgba(255, 255, 255, 0.08)",
-              },
-            }}
-            selected={location.pathname === "/access"}
-          >
-            <ListItemIcon
-              sx={{
-                color: location.pathname === "/access" ? "#f39c12" : "#ffffff",
-                justifyContent: "center",
-                minWidth: "auto",
-              }}
-            >
-              <LockRounded />
             </ListItemIcon>
           </ListItemButton>
         </Link>
