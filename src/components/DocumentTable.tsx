@@ -1,6 +1,6 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import type { Document } from "../types/types";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import AddDocumentDrawer from "./AddDocumentDrawer";
@@ -30,26 +30,37 @@ export default function DataTable({
         display: "flex",
         flexDirection: "column",
         overflow: "auto",
-        margin: 2,
+        p: 3,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-        <h2>{collection}</h2>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            color: "#ffffff",
+            fontWeight: 600,
+            flex: 1,
+          }}
+        >
+          {collection}
+        </Typography>
         <Button
           variant="contained"
           onClick={() => setIsAddNewDocument(true)}
+          startIcon={<AddIcon />}
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 1,
-            margin: 2,
-            marginLeft: "auto",
-            width: "auto",
+            borderRadius: 2,
+            px: 3,
+            py: 1,
           }}
         >
-          <AddIcon />
           Add
         </Button>
       </Box>
@@ -61,10 +72,11 @@ export default function DataTable({
         pageSizeOptions={[10, 20]}
         checkboxSelection
         sx={{
-          border: 1,
           flex: 1,
-          borderStyle: "solid",
-          borderRadius: 4,
+          borderRadius: 2,
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "rgba(255, 255, 255, 0.08)",
+          },
         }}
         getRowId={(row) => row._id}
       />

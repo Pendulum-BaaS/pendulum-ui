@@ -77,7 +77,18 @@ export default function AddDocumentDrawer({
   }, [defaultJSON]);
 
   return (
-    <Drawer open={isAddNewDocument} anchor="right">
+    <Drawer
+      open={isAddNewDocument}
+      anchor="right"
+      PaperProps={{
+        sx: {
+          width: { xs: "100%", sm: 500, md: 600 },
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          backdropFilter: "blur(20px)",
+          borderLeft: "1px solid rgba(255, 255, 255, 0.12)",
+        },
+      }}
+    >
       <Box
         sx={{
           height: "100%",
@@ -87,26 +98,35 @@ export default function AddDocumentDrawer({
       >
         <Box
           sx={{
-            p: 2,
+            p: 3,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
           }}
         >
-          <Typography variant="h6" component="h2">
+          <Typography variant="h5" sx={{ color: "#ffffff", fontWeight: 600 }}>
             Add Documents to {collection}
           </Typography>
           <IconButton
             onClick={() => setIsAddNewDocument(false)}
             size="small"
-            sx={{ alignItems: "center" }}
+            sx={{
+              color: "#ffffff",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+              },
+            }}
           >
             <CloseIcon />
           </IconButton>
         </Box>
 
-        <Box sx={{ flex: 1, p: 2, display: "flex", flexDirection: "column" }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Box sx={{ flex: 1, p: 3, display: "flex", flexDirection: "column" }}>
+          <Typography
+            variant="body2"
+            sx={{ color: "rgba(255, 255, 255, 0.7)", mb: 3 }}
+          >
             Enter your document data as a JSON array. Each object represents a
             document to be added.
           </Typography>
@@ -114,15 +134,16 @@ export default function AddDocumentDrawer({
           <Box sx={{ flex: 1, display: "flex", position: "relative" }}>
             <Box
               sx={{
-                width: 40,
-                backgroundColor: "#f5f5f5",
-                border: "1px solid #ddd",
+                width: 50,
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
                 borderRight: "none",
-                padding: "8px 4px",
-                fontFamily: "monospace",
-                fontSize: "14px",
+                borderRadius: "8px 0 0 8px",
+                padding: "12px 8px",
+                fontFamily: '"Fira Code", "Monaco", "Consolas", monospace',
+                fontSize: "13px",
                 lineHeight: "20px",
-                color: "#666",
+                color: "rgba(255, 255, 255, 0.5)",
                 textAlign: "right",
                 whiteSpace: "pre",
                 overflow: "hidden",
@@ -142,21 +163,32 @@ export default function AddDocumentDrawer({
                 "& .MuiOutlinedInput-root": {
                   height: "100%",
                   alignItems: "flex-start",
-                  fontFamily: "monospace",
-                  fontSize: "14px",
+                  fontFamily: '"Fira Code", "Monaco", "Consolas", monospace',
+                  fontSize: "13px",
                   lineHeight: "20px",
                   borderTopLeftRadius: 0,
                   borderBottomLeftRadius: 0,
+                  borderRadius: "0 8px 8px 0",
+                  backgroundColor: "rgba(255, 255, 255, 0.02)",
+                  "& fieldset": {
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    borderRadius: "0 8px 8px 0",
+                    borderColor: "rgba(255, 255, 255, 0.12)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#6a4c93",
+                  },
                 },
                 "& .MuiOutlinedInput-input": {
                   height: "100% !important",
                   overflow: "auto !important",
                   resize: "none",
-                  padding: "8px 12px",
-                },
-                "& fieldset": {
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
+                  padding: "12px 16px",
+                  color: "#ffffff",
                 },
               }}
               InputProps={{
@@ -169,10 +201,10 @@ export default function AddDocumentDrawer({
           </Box>
         </Box>
 
-        <Divider />
+        <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)" }} />
         <Box
           sx={{
-            p: 2,
+            p: 3,
             display: "flex",
             gap: 2,
             justifyContent: "flex-end",
@@ -184,10 +216,23 @@ export default function AddDocumentDrawer({
               setIsAddNewDocument(false);
               setTextFieldContent(defaultJSON);
             }}
+            sx={{
+              borderColor: "rgba(255, 255, 255, 0.23)",
+              color: "#ffffff",
+              "&:hover": {
+                borderColor: "rgba(255, 255, 255, 0.4)",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+              },
+            }}
           >
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleSubmit} type="submit">
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            type="submit"
+            sx={{ px: 4 }}
+          >
             Save Documents
           </Button>
         </Box>

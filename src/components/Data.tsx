@@ -15,6 +15,20 @@ function Data({ client }: { client: PendulumClient }) {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [columns, setColumns] = useState<GridColDef[]>([]);
 
+  // const getAllColumns = (documents: Document[]): GridColDef[] => {
+  //   const columns = new Set();
+
+  //   for (const doc of documents) {
+  //     const keys = Object.keys(doc);
+  //     keys.forEach((key) => columns.add(key));
+  //   }
+
+  //   return [...columns].map((col) => ({
+  //     field: col as string,
+  //     headerName: col as string,
+  //     width: 200,
+  //   }));
+  // };
   const getAllColumns = (documents: Document[]): GridColDef[] => {
     const columns = new Set();
 
@@ -23,11 +37,45 @@ function Data({ client }: { client: PendulumClient }) {
       keys.forEach((key) => columns.add(key));
     }
 
-    return [...columns].map((col) => ({
-      field: col as string,
-      headerName: col as string,
-      width: 200,
-    }));
+    return [...columns].map((col) => {
+      const columnDef: GridColDef = {
+        field: col as string,
+        headerName: col as string,
+        width: 200,
+      };
+
+      // _id cells get rendered as pills
+      if (col === "_id") {
+        columnDef.renderCell = (params) => (
+          <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+            <Box
+              sx={{
+                backgroundColor: "rgba(106, 76, 147, 0.2)",
+                border: "1px solid rgba(106, 76, 147, 0.4)",
+                borderRadius: "12px",
+                px: 0.5,
+                py: 0.5,
+                fontSize: "0.75rem",
+                fontFamily: "monospace",
+                color: "#ffffff",
+                display: "inline-block",
+                maxWidth: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                lineHeight: 1.7,
+              }}
+              title={params.value}
+            >
+              {params.value}
+            </Box>
+          </Box>
+        );
+        columnDef.width = 220;
+      }
+
+      return columnDef;
+    });
   };
 
   useEffect(() => {
@@ -56,6 +104,7 @@ function Data({ client }: { client: PendulumClient }) {
     >
       <CollectionMenu
         collections={collections}
+        activeCollection={activeCollection}
         setActiveCollection={setActiveCollection}
         setCollections={setCollections}
       />
