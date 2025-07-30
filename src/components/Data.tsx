@@ -56,6 +56,7 @@ function Data({ client }: { client: PendulumClient }) {
     >
       <CollectionMenu
         collections={collections}
+        activeCollection={activeCollection}
         setActiveCollection={setActiveCollection}
         setCollections={setCollections}
       />

@@ -10,6 +10,7 @@ import AddCollectionForm from "./AddCollectionForm";
 
 interface CollectionDrawerProps {
   collections: string[];
+  activeCollection: string;
   setCollections: React.Dispatch<React.SetStateAction<string[]>>;
   setActiveCollection: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -18,6 +19,7 @@ const drawerWidth = 280;
 
 export default function CollectionDrawer({
   collections,
+  activeCollection,
   setCollections,
   setActiveCollection,
 }: CollectionDrawerProps) {
@@ -59,7 +61,6 @@ export default function CollectionDrawer({
             overflow: "auto",
             minHeight: 0,
             maxHeight: "100%",
-            // flex: 1,
           }}
         >
           <List sx={{ padding: 0 }}>
@@ -69,10 +70,15 @@ export default function CollectionDrawer({
                 sx={{
                   minHeight: 48,
                   mx: 1,
+                  my: 1,
                   borderRadius: 1,
                   "&:hover": {
                     backgroundColor: "rgba(255, 255, 255, 0.08)",
                   },
+                  backgroundColor:
+                    activeCollection === collection
+                      ? "rgba(106, 76, 147, 0.3)"
+                      : "transparent",
                   "&.Mui-selected": {
                     backgroundColor: "rgba(106, 76, 147, 0.3)",
                   },
@@ -83,8 +89,11 @@ export default function CollectionDrawer({
                   primary={collection}
                   sx={{
                     "& .MuiListItemText-primary": {
-                      color: "#ffffff",
-                      fontWeight: 500,
+                      color:
+                        activeCollection === collection
+                          ? "#ffffff"
+                          : "rgba(255, 255, 255, 0.7)",
+                      fontWeight: activeCollection === collection ? 600 : 500,
                     },
                   }}
                 />
