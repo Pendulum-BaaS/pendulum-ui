@@ -48,17 +48,19 @@ export default function AddDocumentDrawer({
   const [textFieldContent, setTextFieldContent] = useState("");
   const { client } = useContext(PendulumContext);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    const insertDoc = async (newItems: Document[]) => {
-      const response = await client.db.insert(collection, newItems);
-      setDocuments((prev) => [...response.data, ...prev]);
-    };
-
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const newItems = JSON.parse(textFieldContent);
-      insertDoc(newItems);
-      setIsAddNewDocument(false);
+      const result = await client.db.insert(
+        collection,
+        JSON.parse(textFieldContent),
+      );
+      if (result.success) {
+        setDocuments((prev) => [...result.data, ...prev]);
+        setIsAddNewDocument(false);
+      } else {
+        throw new Error("insert operation failed");
+      }
     } catch (error) {
       console.error(error);
       alert("Invalid JSON format. Please check your syntax.");
