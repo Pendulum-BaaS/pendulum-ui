@@ -92,6 +92,47 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          color: "#ffffff",
+          "&:hover": {
+            backgroundColor: "rgba(106, 76, 147, 0.3)",
+          },
+          "&.Mui-selected": {
+            backgroundColor: "rgba(106, 76, 147, 0.4)",
+            "&:hover": {
+              backgroundColor: "rgba(106, 76, 147, 0.5)",
+            },
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          color: "#ffffff",
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
+        },
+      },
+    },
   },
 });
 
