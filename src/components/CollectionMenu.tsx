@@ -6,6 +6,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Box } from "@mui/material";
 import { useState } from "react";
+import AddCollectionForm from "./AddCollectionForm";
 
 interface CollectionDrawerProps {
   collections: string[];
@@ -70,22 +71,29 @@ export default function CollectionDrawer({
 
         <Box sx={{ flexShrink: 0 }}>
           <Divider />
-          <Button
-            variant="contained"
-            onClick={() => setIsAddCollection(true)}
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              gap: 1,
-              margin: 2,
-              width: "calc(100% - 32px)",
-            }}
-          >
-            <AddIcon />
-            Add Collection
-          </Button>
+          {isAddCollection ? (
+            <AddCollectionForm
+              setIsAddCollection={setIsAddCollection}
+              setCollections={setCollections}
+            />
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => setIsAddCollection(true)}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                gap: 1,
+                margin: 2,
+                width: "calc(100% - 32px)",
+              }}
+            >
+              <AddIcon />
+              Add Collection
+            </Button>
+          )}
         </Box>
       </Box>
     </>
