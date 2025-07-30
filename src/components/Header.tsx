@@ -21,26 +21,11 @@ export default function Header() {
         <Box
           sx={{ flexGrow: 1, display: "flex", alignItems: "center", gap: 2 }}
         >
-          {/* <img
-            src="src/assets/logo.png"
-            alt="Logo"
-            style={{ height: "40px" }}
-          ></img> */}
-          <Box
-            sx={{
-              width: 40,
-              height: 40,
-              background: "linear-gradient(45deg, #f39c12 30%, #f5b041 90%)",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: "bold",
-              color: "#1a1a2e",
-            }}
-          >
-            P
-          </Box>
+          <img
+            src="src/assets/pendulum.svg"
+            alt="Pendulum Logo"
+            style={{ height: "40px", width: "40px" }}
+          ></img>
           <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>
             Pendulum
           </Typography>

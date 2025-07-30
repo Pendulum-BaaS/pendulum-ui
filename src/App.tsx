@@ -8,6 +8,7 @@ import Data from "./components/Data";
 import Users from "./components/Users";
 import Logs from "./components/Logs";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
+import { pendulumGradient } from "./utils/gradients";
 
 const darkTheme = createTheme({
   palette: {
@@ -88,6 +89,15 @@ const darkTheme = createTheme({
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "rgba(255, 255, 255, 0.1)",
             borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+          },
+          "& .MuiCheckbox-root.Mui-checked": {
+            color: "transparent !important",
+            "& .MuiSvgIcon-root": {
+              background: pendulumGradient,
+              borderRadius: "2px",
+              color: "#1a1a2e",
+              fontSize: "1.2rem",
+            },
           },
         },
       },
@@ -183,8 +193,6 @@ function App() {
               <Route path="/data" element={<Data client={client} />}></Route>
               <Route path="/users" element={<Users client={client} />}></Route>
               <Route path="/logs" element={<Logs client={client} />}></Route>
-              {/* TODO: add access component, just displays data tab for now */}
-              <Route path="/access" element={<Data client={client} />}></Route>
             </Routes>
           </Box>
         </Box>

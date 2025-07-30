@@ -12,56 +12,77 @@ import { PendulumContext } from "../contexts/PendulumProvider";
 import CloseIcon from "@mui/icons-material/Close";
 import { type Document } from "../types/types";
 
-interface AddDocumentDrawerProps {
-  isAddNewDocument: boolean;
-  setIsAddNewDocument: React.Dispatch<React.SetStateAction<boolean>>;
-  fields: string[];
-  collection: string;
+interface EditDocumentDrawerProps {
+  isEditDocument: boolean;
+  setIsEditDocument: React.Dispatch<React.SetStateAction<boolean>>;
+  activeCollection: string;
+  selectedDocument: Document;
   setDocuments: React.Dispatch<React.SetStateAction<Document[]>>;
 }
 
 const EXCLUDED_FIELDS = ["_id", "createdAt", "createdBy", "updatedAt"];
 
-export default function AddDocumentDrawer({
-  isAddNewDocument,
-  setIsAddNewDocument,
-  fields,
-  collection,
+export default function EditDocumentDrawer({
+  isEditDocument,
+  setIsEditDocument,
+  activeCollection,
+  selectedDocument,
   setDocuments,
-}: AddDocumentDrawerProps) {
-  const getEligibleFields = () => {
-    const eligibleFields = fields
+}: EditDocumentDrawerProps) {
+  const getEditableFields = () => {
+    return Object.keys(selectedDocument)
       .filter((col) => !EXCLUDED_FIELDS.includes(col))
       .reduce(
         (acc, field) => {
-          acc[field] = "";
+          acc[field] = selectedDocument[field];
           return acc;
         },
         {} as Record<string, string>,
       );
-    return [{ ...eligibleFields }];
   };
-  const defaultJSON = JSON.stringify(getEligibleFields(), null, 2);
+  const defaultJSON = JSON.stringify(getEditableFields(), null, 2);
 
   const [textFieldContent, setTextFieldContent] = useState("");
   const { client } = useContext(PendulumContext);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      const result = await client.db.insert(
-        collection,
-        JSON.parse(textFieldContent),
+      const updatedFields = JSON.parse(textFieldContent);
+      const newItem = {
+        ...(selectedDocument.createdAt && {
+          createdAt: selectedDocument.createdAt,
+        }),
+        ...(selectedDocument.createdBy && {
+          createdBy: selectedDocument.createdBy,
+        }),
+        ...updatedFields,
+      };
+
+      const result = await client.db.replace(
+        activeCollection,
+        selectedDocument._id,
+        newItem,
       );
+
       if (result.success) {
-        setDocuments((prev) => [...result.data, ...prev]);
-        setIsAddNewDocument(false);
+        setDocuments((prev) =>
+          prev.map((doc) =>
+            doc._id === selectedDocument._id ? result.data : doc,
+          ),
+        );
+        setIsEditDocument(false);
       } else {
-        throw new Error("insert operation failed");
+        throw new Error("Update operation failed");
       }
     } catch (error) {
       console.error(error);
-      alert("Invalid JSON format. Please check your syntax.");
+      if (error instanceof SyntaxError) {
+        alert("Invalid JSON format. Please check your syntax.");
+      } else {
+        alert(error);
+      }
     }
   };
 
@@ -73,12 +94,14 @@ export default function AddDocumentDrawer({
   const lineNumbers = lines.map((_, idx) => idx + 1).join("\n");
 
   useEffect(() => {
-    if (isAddNewDocument) setTextFieldContent(defaultJSON);
-  }, [isAddNewDocument, defaultJSON]);
+    if (isEditDocument && selectedDocument) {
+      setTextFieldContent(defaultJSON);
+    }
+  }, [isEditDocument, selectedDocument, defaultJSON]);
 
   return (
     <Drawer
-      open={isAddNewDocument}
+      open={isEditDocument}
       anchor="right"
       PaperProps={{
         sx: {
@@ -106,10 +129,10 @@ export default function AddDocumentDrawer({
           }}
         >
           <Typography variant="h5" sx={{ color: "#ffffff", fontWeight: 600 }}>
-            Add Documents to {collection}
+            Edit document from {activeCollection}
           </Typography>
           <IconButton
-            onClick={() => setIsAddNewDocument(false)}
+            onClick={() => setIsEditDocument(false)}
             size="small"
             sx={{
               color: "#ffffff",
@@ -127,8 +150,7 @@ export default function AddDocumentDrawer({
             variant="body2"
             sx={{ color: "rgba(255, 255, 255, 0.7)", mb: 3 }}
           >
-            Enter your document data as a JSON array. Each object represents a
-            document to be added.
+            Enter your document data as a JSON array.
           </Typography>
 
           <Box sx={{ flex: 1, display: "flex", position: "relative" }}>
@@ -213,7 +235,7 @@ export default function AddDocumentDrawer({
           <Button
             variant="outlined"
             onClick={() => {
-              setIsAddNewDocument(false);
+              setIsEditDocument(false);
               setTextFieldContent(defaultJSON);
             }}
             sx={{
@@ -233,7 +255,7 @@ export default function AddDocumentDrawer({
             type="submit"
             sx={{ px: 4 }}
           >
-            Save Documents
+            Update Document
           </Button>
         </Box>
       </Box>

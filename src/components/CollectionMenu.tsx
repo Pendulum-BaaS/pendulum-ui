@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, Box } from "@mui/material";
 import { useState } from "react";
 import AddCollectionForm from "./AddCollectionForm";
+import { pendulumGradient } from "../utils/gradients";
 
 interface CollectionDrawerProps {
   collections: string[];
@@ -83,17 +84,24 @@ export default function CollectionDrawer({
                     backgroundColor: "rgba(106, 76, 147, 0.3)",
                   },
                 }}
+                selected={activeCollection === collection}
                 onClick={() => setActiveCollection(collection)}
               >
                 <ListItemText
                   primary={collection}
                   sx={{
                     "& .MuiListItemText-primary": {
-                      color:
-                        activeCollection === collection
-                          ? "#ffffff"
-                          : "rgba(255, 255, 255, 0.7)",
-                      fontWeight: activeCollection === collection ? 600 : 500,
+                      ...(activeCollection === collection && {
+                        background: pendulumGradient,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        fontWeight: 600,
+                      }),
+                      ...(activeCollection !== collection && {
+                        color: "rgba(255, 255, 255, 0.7)",
+                        fontWeight: 500,
+                      }),
                     },
                   }}
                 />

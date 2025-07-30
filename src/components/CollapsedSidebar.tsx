@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { Button } from "@mui/material";
@@ -10,9 +9,9 @@ import {
   StorageRounded,
   PeopleAltRounded,
   DescriptionRounded,
-  LockRounded,
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
+import { pendulumGradient } from "../utils/gradients";
 
 const drawerWidth = 60;
 
@@ -49,14 +48,18 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               justifyContent: "center",
               px: 0,
               minHeight: 48,
-              backgroundColor:
+              background:
                 location.pathname === "/data"
-                  ? "rgba(106, 76, 147, 0.3)"
+                  ? pendulumGradient
                   : "transparent",
               "&:hover": {
                 backgroundColor:
                   location.pathname === "/data"
-                    ? "rgba(106, 76, 147, 0.4)"
+                    ? "transparent"
+                    : "rgba(255, 255, 255, 0.08)",
+                background:
+                  location.pathname === "/data"
+                    ? pendulumGradient
                     : "rgba(255, 255, 255, 0.08)",
               },
             }}
@@ -64,7 +67,7 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
           >
             <ListItemIcon
               sx={{
-                color: location.pathname === "/data" ? "#f39c12" : "#ffffff",
+                color: location.pathname === "/data" ? "#1a1a2e" : "#ffffff",
                 justifyContent: "center",
                 minWidth: "auto",
               }}
@@ -82,14 +85,18 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               justifyContent: "center",
               px: 0,
               minHeight: 48,
-              backgroundColor:
+              background:
                 location.pathname === "/users"
-                  ? "rgba(106, 76, 147, 0.3)"
+                  ? pendulumGradient
                   : "transparent",
               "&:hover": {
                 backgroundColor:
                   location.pathname === "/users"
-                    ? "rgba(106, 76, 147, 0.4)"
+                    ? "transparent"
+                    : "rgba(255, 255, 255, 0.08)",
+                background:
+                  location.pathname === "/users"
+                    ? pendulumGradient
                     : "rgba(255, 255, 255, 0.08)",
               },
             }}
@@ -97,7 +104,7 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
           >
             <ListItemIcon
               sx={{
-                color: location.pathname === "/users" ? "#f39c12" : "#ffffff",
+                color: location.pathname === "/users" ? "#1a1a2e" : "#ffffff",
                 justifyContent: "center",
                 minWidth: "auto",
               }}
@@ -115,14 +122,18 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               justifyContent: "center",
               px: 0,
               minHeight: 48,
-              backgroundColor:
+              background:
                 location.pathname === "/logs"
-                  ? "rgba(106, 76, 147, 0.3)"
+                  ? pendulumGradient
                   : "transparent",
               "&:hover": {
                 backgroundColor:
                   location.pathname === "/logs"
-                    ? "rgba(106, 76, 147, 0.4)"
+                    ? "transparent"
+                    : "rgba(255, 255, 255, 0.08)",
+                background:
+                  location.pathname === "/logs"
+                    ? pendulumGradient
                     : "rgba(255, 255, 255, 0.08)",
               },
             }}
@@ -130,45 +141,12 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
           >
             <ListItemIcon
               sx={{
-                color: location.pathname === "/logs" ? "#f39c12" : "#ffffff",
+                color: location.pathname === "/logs" ? "#1a1a2e" : "#ffffff",
                 justifyContent: "center",
                 minWidth: "auto",
               }}
             >
               <DescriptionRounded />
-            </ListItemIcon>
-          </ListItemButton>
-        </Link>
-        <Link to="/access" style={{ textDecoration: "none", color: "inherit" }}>
-          <ListItemButton
-            sx={{
-              mx: 1,
-              my: 1,
-              borderRadius: 2,
-              justifyContent: "center",
-              px: 0,
-              minHeight: 48,
-              backgroundColor:
-                location.pathname === "/access"
-                  ? "rgba(106, 76, 147, 0.3)"
-                  : "transparent",
-              "&:hover": {
-                backgroundColor:
-                  location.pathname === "/access"
-                    ? "rgba(106, 76, 147, 0.4)"
-                    : "rgba(255, 255, 255, 0.08)",
-              },
-            }}
-            selected={location.pathname === "/access"}
-          >
-            <ListItemIcon
-              sx={{
-                color: location.pathname === "/access" ? "#f39c12" : "#ffffff",
-                justifyContent: "center",
-                minWidth: "auto",
-              }}
-            >
-              <LockRounded />
             </ListItemIcon>
           </ListItemButton>
         </Link>
