@@ -21,86 +21,165 @@ export default function ExpandedSidebar({
   collapse: () => void;
 }) {
   return (
-    <>
-      <Drawer
-        sx={{
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
           width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            position: "fixed",
-            top: "64px",
-            height: "calc(100vh - 64px)",
-            background: "inherit",
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <List>
-          <Link to="/data" style={{ textDecoration: "none", color: "inherit" }}>
-            <ListItemButton key="data" sx={{ minHeight: 48 }}>
-              <ListItemIcon>
-                <StorageRounded />
-              </ListItemIcon>
-              <ListItemText primary="Data" />
-            </ListItemButton>
-          </Link>
-          <Link
-            to="/users"
-            style={{ textDecoration: "none", color: "inherit" }}
+          boxSizing: "border-box",
+          position: "fixed",
+          top: "64px",
+          height: "calc(100vh - 64px)",
+          backgroundColor: "rgba(0, 0, 0, 0.3)",
+          backdropFilter: "blur(10px)",
+          borderRight: "1px solid rgba(255, 255, 255, 0.12)",
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <List sx={{ pt: 2 }}>
+        <Link to="/data" style={{ textDecoration: "none", color: "inherit" }}>
+          <ListItemButton
+            sx={{
+              mx: 1,
+              borderRadius: 2,
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+              },
+            }}
           >
-            <ListItemButton key="users" sx={{ minHeight: 48 }}>
-              <ListItemIcon>
-                <PeopleAltRounded />
-              </ListItemIcon>
-              <ListItemText primary="Users" />
-            </ListItemButton>
-          </Link>
-          <Link to="/logs" style={{ textDecoration: "none", color: "inherit" }}>
-            <ListItemButton key="logs" sx={{ minHeight: 48 }}>
-              <ListItemIcon>
-                <DescriptionRounded />
-              </ListItemIcon>
-              <ListItemText primary="Logs" />
-            </ListItemButton>
-          </Link>
-        </List>
-        <Divider />
-        <List>
-          <ListItemButton key="tbd1" sx={{ minHeight: 48 }}>
-            <ListItemIcon>
-              <DescriptionRounded />
+            <ListItemIcon sx={{ color: "#ffffff" }}>
+              <StorageRounded />
             </ListItemIcon>
-            <ListItemText primary="TBD" />
+            <ListItemText
+              primary="Data"
+              sx={{
+                "& .MuiListItemText-primary": {
+                  color: "#ffffff",
+                  fontWeight: 500,
+                },
+              }}
+            />
           </ListItemButton>
-          <ListItemButton key="tbd2" sx={{ minHeight: 48 }}>
-            <ListItemIcon>
+        </Link>
+        <Link to="/users" style={{ textDecoration: "none", color: "inherit" }}>
+          <ListItemButton
+            sx={{
+              mx: 1,
+              borderRadius: 2,
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "#ffffff" }}>
               <PeopleAltRounded />
             </ListItemIcon>
-            <ListItemText primary="TBD 2.0" />
+            <ListItemText
+              primary="Users"
+              sx={{
+                "& .MuiListItemText-primary": {
+                  color: "#ffffff",
+                  fontWeight: 500,
+                },
+              }}
+            />
           </ListItemButton>
-        </List>
-        <Divider />
-        <Button
-          variant="contained"
-          onClick={collapse}
+        </Link>
+        <Link to="/logs" style={{ textDecoration: "none", color: "inherit" }}>
+          <ListItemButton
+            sx={{
+              mx: 1,
+              borderRadius: 2,
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "#ffffff" }}>
+              <DescriptionRounded />
+            </ListItemIcon>
+            <ListItemText
+              primary="Logs"
+              sx={{
+                "& .MuiListItemText-primary": {
+                  color: "#ffffff",
+                  fontWeight: 500,
+                },
+              }}
+            />
+          </ListItemButton>
+        </Link>
+      </List>
+
+      <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)", my: 2 }} />
+
+      <List>
+        <ListItemButton
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            margin: 2,
-            marginTop: "auto",
-            width: "auto",
-            background: "inherit",
-            color: "inherit",
+            mx: 1,
+            borderRadius: 2,
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.08)",
+            },
           }}
         >
-          <KeyboardDoubleArrowLeftIcon />
-          Collapse
-        </Button>
-      </Drawer>
-    </>
+          <ListItemIcon sx={{ color: "#ffffff" }}>
+            <DescriptionRounded />
+          </ListItemIcon>
+          <ListItemText
+            primary="TBD"
+            sx={{
+              "& .MuiListItemText-primary": {
+                color: "#ffffff",
+                fontWeight: 500,
+              },
+            }}
+          />
+        </ListItemButton>
+        <ListItemButton
+          sx={{
+            mx: 1,
+            borderRadius: 2,
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.08)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "#ffffff" }}>
+            <PeopleAltRounded />
+          </ListItemIcon>
+          <ListItemText
+            primary="TBD 2.0"
+            sx={{
+              "& .MuiListItemText-primary": {
+                color: "#ffffff",
+                fontWeight: 500,
+              },
+            }}
+          />
+        </ListItemButton>
+      </List>
+      <Button
+        variant="outlined"
+        onClick={collapse}
+        startIcon={<KeyboardDoubleArrowLeftIcon />}
+        sx={{
+          mx: 2,
+          mt: "auto",
+          mb: 2,
+          borderColor: "rgba(255, 255, 255, 0.23)",
+          color: "#ffffff",
+          "&:hover": {
+            borderColor: "rgba(255, 255, 255, 0.4)",
+            backgroundColor: "rgba(255, 255, 255, 0.05)",
+          },
+        }}
+      >
+        Collapse
+      </Button>
+    </Drawer>
   );
 }

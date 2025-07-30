@@ -29,8 +29,8 @@ export default function AddCollectionForm({
       sx={{
         display: "flex",
         flexDirection: "column",
-        margin: 2,
-        width: "calc(100% - 32px)",
+        p: 2,
+        gap: 2,
       }}
       noValidate
       autoComplete="off"
@@ -41,20 +41,35 @@ export default function AddCollectionForm({
         variant="outlined"
         value={collectionName}
         onChange={(e) => setCollectionName(e.target.value)}
+        size="small"
+        sx={{
+          "& .MuiInputLabel-root": {
+            color: "rgba(255, 255, 255, 0.7)",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#6a4c93",
+          },
+        }}
       />
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-evenly",
+          gap: 1,
         }}
       >
         <Button
           variant="contained"
           onClick={() => setIsAddCollection(false)}
+          size="small"
           sx={{
-            width: "auto",
-            margin: 1,
+            flex: 1,
+            borderColor: "rgba(255, 255, 255, 0.23)",
+            color: "#ffffff",
+            "&:hover": {
+              borderColor: "rgba(255, 255, 255, 0.4)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+            },
           }}
         >
           Cancel
@@ -62,9 +77,9 @@ export default function AddCollectionForm({
         <Button
           variant="contained"
           onClick={handleAddNewCollection}
+          size="small"
           sx={{
-            width: "auto",
-            margin: 1,
+            flex: 1,
           }}
           disabled={!collectionName.trim()}
         >

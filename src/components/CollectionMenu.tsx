@@ -14,7 +14,7 @@ interface CollectionDrawerProps {
   setActiveCollection: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 export default function CollectionDrawer({
   collections,
@@ -33,15 +33,20 @@ export default function CollectionDrawer({
           flexShrink: 0,
           maxHeight: "100%",
           overflow: "auto",
-          backgroundColor: "inherit",
+          backgroundColor: "rgba(0, 0, 0, 0.2)",
+          backdropFilter: "blur(10px)",
+          borderRight: "1px solid rgba(255, 255, 255, 0.12)",
         }}
       >
         <Box sx={{ flexShrink: 0 }}>
           <ListSubheader
             sx={{
-              backgroundColor: "inherit",
-              borderBottom: 1,
-              borderColor: "divider",
+              backgroundColor: "transparent",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+              color: "#ffffff",
+              fontWeight: 600,
+              fontSize: "1rem",
+              py: 2,
             }}
           >
             Collections
@@ -54,23 +59,42 @@ export default function CollectionDrawer({
             overflow: "auto",
             minHeight: 0,
             maxHeight: "100%",
+            // flex: 1,
           }}
         >
           <List sx={{ padding: 0 }}>
             {collections.map((collection, idx) => (
               <ListItemButton
                 key={collection + idx}
-                sx={{ minHeight: 48 }}
+                sx={{
+                  minHeight: 48,
+                  mx: 1,
+                  borderRadius: 1,
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.08)",
+                  },
+                  "&.Mui-selected": {
+                    backgroundColor: "rgba(106, 76, 147, 0.3)",
+                  },
+                }}
                 onClick={() => setActiveCollection(collection)}
               >
-                <ListItemText primary={collection} />
+                <ListItemText
+                  primary={collection}
+                  sx={{
+                    "& .MuiListItemText-primary": {
+                      color: "#ffffff",
+                      fontWeight: 500,
+                    },
+                  }}
+                />
               </ListItemButton>
             ))}
           </List>
         </Box>
 
         <Box sx={{ flexShrink: 0 }}>
-          <Divider />
+          <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)" }} />
           {isAddCollection ? (
             <AddCollectionForm
               setIsAddCollection={setIsAddCollection}
@@ -78,19 +102,21 @@ export default function CollectionDrawer({
             />
           ) : (
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() => setIsAddCollection(true)}
+              startIcon={<AddIcon />}
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                gap: 1,
-                margin: 2,
+                m: 2,
                 width: "calc(100% - 32px)",
+                borderColor: "rgba(255, 255, 255, 0.23)",
+                color: "#ffffff",
+                "&:hover": {
+                  borderColor: "rgba(255, 255, 255, 0.4)",
+                  backgroundColor: "rgba(255, 255, 255, 0.05)",
+                },
               }}
+              fullWidth
             >
-              <AddIcon />
               Add Collection
             </Button>
           )}
