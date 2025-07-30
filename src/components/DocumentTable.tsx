@@ -1,4 +1,8 @@
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  type GridColDef,
+  type GridRowSelectionModel,
+} from "@mui/x-data-grid";
 import type { Document } from "../types/types";
 import {
   Box,
@@ -12,6 +16,7 @@ import {
 } from "@mui/material";
 import { useState, useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -41,6 +46,7 @@ export default function DataTable({
 }: DataTableProps) {
   const [isAddNewDocument, setIsAddNewDocument] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const { client } = useContext(PendulumContext);
 
   const paginationModel = { page: 0, pageSize: 10 };
@@ -53,7 +59,6 @@ export default function DataTable({
 
   const handleMenuClose = () => setAnchorEl(null);
 
-  console.log(activeCollection);
   const handleClearCollection = async () => {
     const confirmed = window.confirm(
       `Are you sure you want to clear all documents? This action cannot be undone.`,
@@ -87,6 +92,136 @@ export default function DataTable({
     setActiveCollection(collections[0]);
     handleMenuClose();
   };
+
+  const handleEditDocument = () => {};
+
+  const handleDeleteDocuments = async () => {
+    /* TODO: update logic here after simplifying backend routes */
+    try {
+      let result;
+      if (selectedRows.length === 1) {
+        result = await client.db.removeOne(activeCollection, selectedRows[0]);
+      } else if (selectedRows.length === documents.length) {
+        result = await client.db.removeAll(activeCollection);
+      } else {
+        for (let i = 0; i < selectedRows.length; i++) {
+          await client.db.removeOne(activeCollection, selectedRows[i]);
+        }
+        result = {
+          success: true,
+        };
+      }
+      if (result.success) {
+        setDocuments((prev) =>
+          prev.filter((p) => !selectedRows.includes(p._id)),
+        );
+        setSelectedRows([]);
+      } else {
+        throw new Error("Failed to delete documents");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleRowSelectionChange = (newSelection: GridRowSelectionModel) => {
+    switch (newSelection.type) {
+      case "include":
+        setSelectedRows([...newSelection.ids] as string[]);
+        break;
+      case "exclude":
+        setSelectedRows(
+          documents
+            .map((doc) => doc._id)
+            .filter((_id) => !newSelection.ids.has(_id)),
+        );
+        break;
+    }
+  };
+
+  const renderActionButtons = () => {
+    const selectedCount = selectedRows.length;
+
+    if (selectedCount === 0) {
+      return (
+        <Button
+          variant="contained"
+          onClick={() => setIsAddNewDocument(true)}
+          startIcon={<AddIcon />}
+          sx={{
+            borderRadius: 2,
+            px: 3,
+            py: 1,
+          }}
+        >
+          Add
+        </Button>
+      );
+    } else if (selectedCount === 1) {
+      return (
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Button
+            variant="outlined"
+            onClick={handleEditDocument}
+            startIcon={<EditIcon />}
+            sx={{
+              borderRadius: 2,
+              px: 3,
+              py: 1,
+              borderColor: "rgba(255, 255, 255, 0.23)",
+              color: "#ffffff",
+              "&:hover": {
+                borderColor: "rgba(255, 255, 255, 0.4)",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+              },
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleDeleteDocuments}
+            startIcon={<DeleteIcon />}
+            sx={{
+              borderRadius: 2,
+              px: 3,
+              py: 1,
+              borderColor: "rgba(231, 76, 60, 0.5)",
+              color: "#e74c3c",
+              "&:hover": {
+                borderColor: "#e74c3c",
+                backgroundColor: "rgba(231, 76, 60, 0.1)",
+              },
+            }}
+          >
+            Delete
+          </Button>
+        </Box>
+      );
+    } else {
+      return (
+        <Button
+          variant="outlined"
+          onClick={handleDeleteDocuments}
+          startIcon={<DeleteIcon />}
+          sx={{
+            borderRadius: 2,
+            px: 3,
+            py: 1,
+            borderColor: "rgba(231, 76, 60, 0.5)",
+            color: "#e74c3c",
+            "&:hover": {
+              borderColor: "#e74c3c",
+              backgroundColor: "rgba(231, 76, 60, 0.1)",
+            },
+          }}
+        >
+          Delete ({selectedCount})
+        </Button>
+      );
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -116,19 +251,9 @@ export default function DataTable({
           {activeCollection}
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Button
-            variant="contained"
-            onClick={() => setIsAddNewDocument(true)}
-            startIcon={<AddIcon />}
-            sx={{
-              borderRadius: 2,
-              px: 3,
-              py: 1,
-            }}
-          >
-            Add
-          </Button>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "Center" }}>
+          {renderActionButtons()}
+
           <IconButton
             onClick={handleMenuOpen}
             sx={{
@@ -204,6 +329,7 @@ export default function DataTable({
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[10, 20]}
         checkboxSelection
+        onRowSelectionModelChange={handleRowSelectionChange}
         sx={{
           flex: 1,
           borderRadius: 2,
