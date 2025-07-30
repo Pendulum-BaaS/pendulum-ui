@@ -12,6 +12,7 @@ import {
   PeopleAltRounded,
   DescriptionRounded,
 } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 200;
 
@@ -20,6 +21,8 @@ export default function ExpandedSidebar({
 }: {
   collapse: () => void;
 }) {
+  const location = useLocation();
+
   return (
     <Drawer
       sx={{
@@ -44,13 +47,26 @@ export default function ExpandedSidebar({
           <ListItemButton
             sx={{
               mx: 1,
+              my: 1,
               borderRadius: 2,
+              backgroundColor:
+                location.pathname === "/data"
+                  ? "rgba(106, 76, 147, 0.3)"
+                  : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor:
+                  location.pathname === "/data"
+                    ? "rgba(106, 76, 147, 0.4)"
+                    : "rgba(255, 255, 255, 0.08)",
               },
             }}
+            selected={location.pathname === "/data"}
           >
-            <ListItemIcon sx={{ color: "#ffffff" }}>
+            <ListItemIcon
+              sx={{
+                color: location.pathname === "/data" ? "#f39c12" : "#ffffff",
+              }}
+            >
               <StorageRounded />
             </ListItemIcon>
             <ListItemText
@@ -58,7 +74,7 @@ export default function ExpandedSidebar({
               sx={{
                 "& .MuiListItemText-primary": {
                   color: "#ffffff",
-                  fontWeight: 500,
+                  fontWeight: location.pathname === "/data" ? 600 : 500,
                 },
               }}
             />
@@ -68,13 +84,26 @@ export default function ExpandedSidebar({
           <ListItemButton
             sx={{
               mx: 1,
+              my: 1,
               borderRadius: 2,
+              backgroundColor:
+                location.pathname === "/users"
+                  ? "rgba(106, 76, 147, 0.3)"
+                  : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor:
+                  location.pathname === "/users"
+                    ? "rgba(106, 76, 147, 0.4)"
+                    : "rgba(255, 255, 255, 0.08)",
               },
             }}
+            selected={location.pathname === "/users"}
           >
-            <ListItemIcon sx={{ color: "#ffffff" }}>
+            <ListItemIcon
+              sx={{
+                color: location.pathname === "/users" ? "#f39c12" : "#ffffff",
+              }}
+            >
               <PeopleAltRounded />
             </ListItemIcon>
             <ListItemText
@@ -82,7 +111,7 @@ export default function ExpandedSidebar({
               sx={{
                 "& .MuiListItemText-primary": {
                   color: "#ffffff",
-                  fontWeight: 500,
+                  fontWeight: location.pathname === "/users" ? 600 : 500,
                 },
               }}
             />
@@ -92,13 +121,26 @@ export default function ExpandedSidebar({
           <ListItemButton
             sx={{
               mx: 1,
+              my: 1,
               borderRadius: 2,
+              backgroundColor:
+                location.pathname === "/logs"
+                  ? "rgba(106, 76, 147, 0.3)"
+                  : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor:
+                  location.pathname === "/logs"
+                    ? "rgba(106, 76, 147, 0.4)"
+                    : "rgba(255, 255, 255, 0.08)",
               },
             }}
+            selected={location.pathname === "/logs"}
           >
-            <ListItemIcon sx={{ color: "#ffffff" }}>
+            <ListItemIcon
+              sx={{
+                color: location.pathname === "/logs" ? "#f39c12" : "#ffffff",
+              }}
+            >
               <DescriptionRounded />
             </ListItemIcon>
             <ListItemText
@@ -106,7 +148,7 @@ export default function ExpandedSidebar({
               sx={{
                 "& .MuiListItemText-primary": {
                   color: "#ffffff",
-                  fontWeight: 500,
+                  fontWeight: location.pathname === "/logs" ? 600 : 500,
                 },
               }}
             />

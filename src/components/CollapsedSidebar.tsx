@@ -11,10 +11,13 @@ import {
   PeopleAltRounded,
   DescriptionRounded,
 } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 60;
 
 export default function CollapsedSidebar({ expand }: { expand: () => void }) {
+  const location = useLocation();
+
   return (
     <Drawer
       sx={{
@@ -39,18 +42,27 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
         <Link to="/data" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItemButton
             sx={{
-              mx: 0.5,
+              mx: 1,
+              my: 1,
               borderRadius: 2,
               justifyContent: "center",
               px: 0,
+              backgroundColor:
+                location.pathname === "/data"
+                  ? "rgba(106, 76, 147, 0.3)"
+                  : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor:
+                  location.pathname === "/data"
+                    ? "rgba(106, 76, 147, 0.4)"
+                    : "rgba(255, 255, 255, 0.08)",
               },
             }}
+            selected={location.pathname === "/data"}
           >
             <ListItemIcon
               sx={{
-                color: "#ffffff",
+                color: location.pathname === "/data" ? "#f39c12" : "#ffffff",
                 justifyContent: "center",
                 minWidth: "auto",
               }}
@@ -62,18 +74,27 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
         <Link to="/users" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItemButton
             sx={{
-              mx: 0.5,
+              mx: 1,
+              my: 1,
               borderRadius: 2,
               justifyContent: "center",
               px: 0,
+              backgroundColor:
+                location.pathname === "/users"
+                  ? "rgba(106, 76, 147, 0.3)"
+                  : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor:
+                  location.pathname === "/users"
+                    ? "rgba(106, 76, 147, 0.4)"
+                    : "rgba(255, 255, 255, 0.08)",
               },
             }}
+            selected={location.pathname === "/users"}
           >
             <ListItemIcon
               sx={{
-                color: "#ffffff",
+                color: location.pathname === "/users" ? "#f39c12" : "#ffffff",
                 justifyContent: "center",
                 minWidth: "auto",
               }}
@@ -85,18 +106,27 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
         <Link to="/logs" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItemButton
             sx={{
-              mx: 0.5,
+              mx: 1,
+              my: 1,
               borderRadius: 2,
               justifyContent: "center",
               px: 0,
+              backgroundColor:
+                location.pathname === "/logs"
+                  ? "rgba(106, 76, 147, 0.3)"
+                  : "transparent",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                backgroundColor:
+                  location.pathname === "/logs"
+                    ? "rgba(106, 76, 147, 0.4)"
+                    : "rgba(255, 255, 255, 0.08)",
               },
             }}
+            selected={location.pathname === "/logs"}
           >
             <ListItemIcon
               sx={{
-                color: "#ffffff",
+                color: location.pathname === "/logs" ? "#f39c12" : "#ffffff",
                 justifyContent: "center",
                 minWidth: "auto",
               }}
