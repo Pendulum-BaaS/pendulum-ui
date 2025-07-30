@@ -20,8 +20,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LockIcon from "@mui/icons-material/Lock";
 import AddDocumentDrawer from "./AddDocumentDrawer";
 import EditDocumentDrawer from "./EditDocumentDrawer";
+import CollectionPermissionsDrawer from "./CollectionPermissionsDrawer";
 import { PendulumContext } from "../contexts/PendulumProvider";
 
 interface DataTableProps {
@@ -47,6 +49,7 @@ export default function DataTable({
 }: DataTableProps) {
   const [isAddNewDocument, setIsAddNewDocument] = useState(false);
   const [isEditDocument, setIsEditDocument] = useState(false);
+  const [isPermissionsDrawer, setIsPermissionsDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const { client } = useContext(PendulumContext);
@@ -242,18 +245,38 @@ export default function DataTable({
           mb: 3,
         }}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            color: "#ffffff",
-            fontWeight: 600,
-            flex: 1,
-          }}
-        >
-          {activeCollection}
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography
+            variant="h4"
+            sx={{
+              color: "#ffffff",
+              fontWeight: 600,
+            }}
+          >
+            {activeCollection}
+          </Typography>
 
-        <Box sx={{ display: "flex", gap: 1, alignItems: "Center" }}>
+          <IconButton
+            onClick={() => setIsPermissionsDrawer(true)}
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              borderRadius: 2,
+              color: "rgba(255, 255, 255, 0.7)",
+              ml: 1,
+              width: 40,
+              height: 40,
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                color: "#ffffff",
+              },
+            }}
+          >
+            <LockIcon fontSize="medium" />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 1, alignItems: "Center", ml: "auto" }}>
           {renderActionButtons()}
 
           <IconButton
@@ -361,6 +384,14 @@ export default function DataTable({
             documents.find((d) => d._id === selectedRows[0]) as Document
           }
           setDocuments={setDocuments}
+        />
+      ) : null}
+
+      {isPermissionsDrawer ? (
+        <CollectionPermissionsDrawer
+          isOpen={isPermissionsDrawer}
+          onClose={() => setIsPermissionsDrawer(false)}
+          collection={activeCollection}
         />
       ) : null}
     </Box>
