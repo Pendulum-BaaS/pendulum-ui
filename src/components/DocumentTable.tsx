@@ -21,6 +21,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddDocumentDrawer from "./AddDocumentDrawer";
+import EditDocumentDrawer from "./EditDocumentDrawer";
 import { PendulumContext } from "../contexts/PendulumProvider";
 
 interface DataTableProps {
@@ -45,6 +46,7 @@ export default function DataTable({
   setDocuments,
 }: DataTableProps) {
   const [isAddNewDocument, setIsAddNewDocument] = useState(false);
+  const [isEditDocument, setIsEditDocument] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const { client } = useContext(PendulumContext);
@@ -93,7 +95,7 @@ export default function DataTable({
     handleMenuClose();
   };
 
-  const handleEditDocument = () => {};
+  const handleEditDocument = () => setIsEditDocument(true);
 
   const handleDeleteDocuments = async () => {
     /* TODO: update logic here after simplifying backend routes */
@@ -340,13 +342,27 @@ export default function DataTable({
         getRowId={(row) => row._id}
       />
 
-      <AddDocumentDrawer
-        isAddNewDocument={isAddNewDocument}
-        setIsAddNewDocument={setIsAddNewDocument}
-        fields={fields}
-        collection={activeCollection}
-        setDocuments={setDocuments}
-      />
+      {isAddNewDocument ? (
+        <AddDocumentDrawer
+          isAddNewDocument={isAddNewDocument}
+          setIsAddNewDocument={setIsAddNewDocument}
+          fields={fields}
+          collection={activeCollection}
+          setDocuments={setDocuments}
+        />
+      ) : null}
+
+      {isEditDocument ? (
+        <EditDocumentDrawer
+          isEditDocument={isEditDocument}
+          setIsEditDocument={setIsEditDocument}
+          activeCollection={activeCollection}
+          selectedDocument={
+            documents.find((d) => d._id === selectedRows[0]) as Document
+          }
+          setDocuments={setDocuments}
+        />
+      ) : null}
     </Box>
   );
 }
