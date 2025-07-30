@@ -59,7 +59,11 @@ function Data({ client }: { client: PendulumClient }) {
         setActiveCollection={setActiveCollection}
         setCollections={setCollections}
       />
-      <DocumentTable columns={columns} documents={documents} />
+      <DocumentTable
+        collection={activeCollection}
+        columns={columns}
+        documents={documents}
+      />
     </Box>
   );
 }
