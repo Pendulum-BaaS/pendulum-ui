@@ -29,21 +29,19 @@ export default function AddDocumentDrawer({
   collection,
   setDocuments,
 }: AddDocumentDrawerProps) {
-  const defaultJSON = JSON.stringify(
-    [
-      fields
-        .filter((col) => !EXCLUDED_FIELDS.includes(col))
-        .reduce(
-          (acc, field) => {
-            acc[field] = "";
-            return acc;
-          },
-          {} as Record<string, string>,
-        ),
-    ],
-    null,
-    2,
-  );
+  const getEligibleFields = () => {
+    const eligibleFields = fields
+      .filter((col) => !EXCLUDED_FIELDS.includes(col))
+      .reduce(
+        (acc, field) => {
+          acc[field] = "";
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
+    return [{ ...eligibleFields }];
+  };
+  const defaultJSON = JSON.stringify(getEligibleFields(), null, 2);
 
   const [textFieldContent, setTextFieldContent] = useState("");
   const { client } = useContext(PendulumContext);
@@ -75,8 +73,8 @@ export default function AddDocumentDrawer({
   const lineNumbers = lines.map((_, idx) => idx + 1).join("\n");
 
   useEffect(() => {
-    setTextFieldContent(defaultJSON);
-  }, [defaultJSON]);
+    if (isAddNewDocument) setTextFieldContent(defaultJSON);
+  }, [isAddNewDocument, defaultJSON]);
 
   return (
     <Drawer
