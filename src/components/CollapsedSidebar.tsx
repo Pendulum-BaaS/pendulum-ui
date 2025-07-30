@@ -47,6 +47,7 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               borderRadius: 2,
               justifyContent: "center",
               px: 0,
+              minHeight: 48,
               backgroundColor:
                 location.pathname === "/data"
                   ? "rgba(106, 76, 147, 0.3)"
@@ -79,6 +80,7 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               borderRadius: 2,
               justifyContent: "center",
               px: 0,
+              minHeight: 48,
               backgroundColor:
                 location.pathname === "/users"
                   ? "rgba(106, 76, 147, 0.3)"
@@ -111,6 +113,7 @@ export default function CollapsedSidebar({ expand }: { expand: () => void }) {
               borderRadius: 2,
               justifyContent: "center",
               px: 0,
+              minHeight: 48,
               backgroundColor:
                 location.pathname === "/logs"
                   ? "rgba(106, 76, 147, 0.3)"
