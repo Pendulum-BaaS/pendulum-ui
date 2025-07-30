@@ -7,28 +7,12 @@ import DocumentTable from "./DocumentTable";
 import { type GridColDef } from "@mui/x-data-grid";
 
 function Data({ client }: { client: PendulumClient }) {
-  const [collections, setCollections] = useState<string[]>([
-    "todos",
-    "app-test",
-  ]);
-  const [activeCollection, setActiveCollection] = useState(collections[0]);
+  const testCollections = ["todos", "app-test"];
+  const [collections, setCollections] = useState<string[]>(testCollections);
+  const [activeCollection, setActiveCollection] = useState(testCollections[0]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [columns, setColumns] = useState<GridColDef[]>([]);
 
-  // const getAllColumns = (documents: Document[]): GridColDef[] => {
-  //   const columns = new Set();
-
-  //   for (const doc of documents) {
-  //     const keys = Object.keys(doc);
-  //     keys.forEach((key) => columns.add(key));
-  //   }
-
-  //   return [...columns].map((col) => ({
-  //     field: col as string,
-  //     headerName: col as string,
-  //     width: 200,
-  //   }));
-  // };
   const getAllColumns = (documents: Document[]): GridColDef[] => {
     const columns = new Set();
 
@@ -109,8 +93,12 @@ function Data({ client }: { client: PendulumClient }) {
         setCollections={setCollections}
       />
       <DocumentTable
-        collection={activeCollection}
+        collections={collections}
+        setCollections={setCollections}
+        activeCollection={activeCollection}
+        setActiveCollection={setActiveCollection}
         columns={columns}
+        setColumns={setColumns}
         documents={documents}
         setDocuments={setDocuments}
       />
