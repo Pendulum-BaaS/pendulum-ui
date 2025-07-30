@@ -12,6 +12,7 @@ import {
   DescriptionRounded,
 } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
+import { pendulumGradient } from "../utils/gradients";
 
 const drawerWidth = 200;
 
@@ -48,14 +49,19 @@ export default function ExpandedSidebar({
               mx: 1,
               my: 1,
               borderRadius: 2,
-              backgroundColor:
+              background:
                 location.pathname === "/data"
-                  ? "rgba(106, 76, 147, 0.3)"
+                  ? pendulumGradient
                   : "transparent",
               "&:hover": {
                 backgroundColor:
                   location.pathname === "/data"
-                    ? "rgba(106, 76, 147, 0.4)"
+                    ? // ? "rgba(106, 76, 147, 0.4)"
+                      "transparent"
+                    : "rgba(255, 255, 255, 0.08)",
+                background:
+                  location.pathname === "/data"
+                    ? pendulumGradient
                     : "rgba(255, 255, 255, 0.08)",
               },
             }}
@@ -63,7 +69,8 @@ export default function ExpandedSidebar({
           >
             <ListItemIcon
               sx={{
-                color: location.pathname === "/data" ? "#f39c12" : "#ffffff",
+                color: location.pathname === "/data" ? "#1a1a2e" : "#ffffff",
+                fontWeight: location.pathname === "/data" ? "bold" : "normal",
               }}
             >
               <StorageRounded />
@@ -72,27 +79,32 @@ export default function ExpandedSidebar({
               primary="Data"
               sx={{
                 "& .MuiListItemText-primary": {
-                  color: "#ffffff",
-                  fontWeight: location.pathname === "/data" ? 600 : 500,
+                  color: location.pathname === "/data" ? "#1a1a2e" : "#ffffff",
+                  fontWeight: location.pathname === "/data" ? 700 : 500,
                 },
               }}
             />
           </ListItemButton>
         </Link>
+
         <Link to="/users" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItemButton
             sx={{
               mx: 1,
               my: 1,
               borderRadius: 2,
-              backgroundColor:
+              background:
                 location.pathname === "/users"
-                  ? "rgba(106, 76, 147, 0.3)"
+                  ? pendulumGradient
                   : "transparent",
               "&:hover": {
                 backgroundColor:
                   location.pathname === "/users"
-                    ? "rgba(106, 76, 147, 0.4)"
+                    ? "transparent"
+                    : "rgba(255, 255, 255, 0.08)",
+                background:
+                  location.pathname === "/users"
+                    ? pendulumGradient
                     : "rgba(255, 255, 255, 0.08)",
               },
             }}
@@ -100,7 +112,7 @@ export default function ExpandedSidebar({
           >
             <ListItemIcon
               sx={{
-                color: location.pathname === "/users" ? "#f39c12" : "#ffffff",
+                color: location.pathname === "/users" ? "#1a1a2e" : "#ffffff",
               }}
             >
               <PeopleAltRounded />
@@ -109,27 +121,32 @@ export default function ExpandedSidebar({
               primary="Users"
               sx={{
                 "& .MuiListItemText-primary": {
-                  color: "#ffffff",
-                  fontWeight: location.pathname === "/users" ? 600 : 500,
+                  color: location.pathname === "/users" ? "#1a1a2e" : "#ffffff",
+                  fontWeight: location.pathname === "/users" ? 700 : 500,
                 },
               }}
             />
           </ListItemButton>
         </Link>
+
         <Link to="/logs" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItemButton
             sx={{
               mx: 1,
               my: 1,
               borderRadius: 2,
-              backgroundColor:
+              background:
                 location.pathname === "/logs"
-                  ? "rgba(106, 76, 147, 0.3)"
+                  ? pendulumGradient
                   : "transparent",
               "&:hover": {
                 backgroundColor:
                   location.pathname === "/logs"
-                    ? "rgba(106, 76, 147, 0.4)"
+                    ? "transparent"
+                    : "rgba(255, 255, 255, 0.08)",
+                background:
+                  location.pathname === "/logs"
+                    ? pendulumGradient
                     : "rgba(255, 255, 255, 0.08)",
               },
             }}
@@ -137,7 +154,7 @@ export default function ExpandedSidebar({
           >
             <ListItemIcon
               sx={{
-                color: location.pathname === "/logs" ? "#f39c12" : "#ffffff",
+                color: location.pathname === "/logs" ? "#1a1a2e" : "#ffffff",
               }}
             >
               <DescriptionRounded />
@@ -146,8 +163,8 @@ export default function ExpandedSidebar({
               primary="Logs"
               sx={{
                 "& .MuiListItemText-primary": {
-                  color: "#ffffff",
-                  fontWeight: location.pathname === "/logs" ? 600 : 500,
+                  color: location.pathname === "/logs" ? "#1a1a2e" : "#ffffff",
+                  fontWeight: location.pathname === "/logs" ? 700 : 500,
                 },
               }}
             />
