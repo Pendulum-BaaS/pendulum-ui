@@ -10,7 +10,6 @@ export default function Header() {
       position="static"
       sx={{
         background: "inherit",
-        zIndex: (theme) => theme.zIndex.drawer + 1,
         width: "100vw",
       }}
     >

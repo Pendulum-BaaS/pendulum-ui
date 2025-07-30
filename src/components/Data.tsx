@@ -63,6 +63,7 @@ function Data({ client }: { client: PendulumClient }) {
         collection={activeCollection}
         columns={columns}
         documents={documents}
+        setDocuments={setDocuments}
       />
     </Box>
   );
