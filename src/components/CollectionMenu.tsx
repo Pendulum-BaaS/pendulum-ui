@@ -4,9 +4,11 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, Box } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Button, Box, IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import AddCollectionForm from "./AddCollectionForm";
+import EditPermissionsDrawer from "./EditPermissionsDrawer";
 import { pendulumGradient } from "../utils/gradients";
 
 interface CollectionDrawerProps {
@@ -25,6 +27,19 @@ export default function CollectionDrawer({
   setActiveCollection,
 }: CollectionDrawerProps) {
   const [isAddCollection, setIsAddCollection] = useState(false);
+  const [editPermissionsOpen, setEditPermissionsOpen] = useState(false);
+  const [selectedCollectionForEdit, setSelectedCollectionForEdit] = useState<string>("");
+
+  const handleEditPermissions = (collectionName: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setSelectedCollectionForEdit(collectionName);
+    setEditPermissionsOpen(true);
+  };
+
+  const handleClosedEditPermissions = () => {
+    setEditPermissionsOpen(false);
+    setSelectedCollectionForEdit("");
+  };
 
   return (
     <>
@@ -105,6 +120,22 @@ export default function CollectionDrawer({
                     },
                   }}
                 />
+                <Tooltip title="Edit Permissions" placement="top">
+                  <IconButton
+                    size="small"
+                    onClick={(e) => handleEditPermissions(collection, e)}
+                    sx={{
+                      color: "rgba(255, 255, 255, 0.5)",
+                      "&:hover": {
+                        color: "#6a4c93",
+                        backgroundColor: "rgba(106, 76, 147, 0.1)",
+                      },
+                      ml: 1,
+                    }}
+                  >
+                    <SettingsIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
               </ListItemButton>
             ))}
           </List>
@@ -139,6 +170,12 @@ export default function CollectionDrawer({
           )}
         </Box>
       </Box>
+
+      <EditPermissionsDrawer
+        isOpen={editPermissionsOpen}
+        onClose={handleClosedEditPermissions}
+        collectionName={selectedCollectionForEdit}
+      />
     </>
   );
 }
