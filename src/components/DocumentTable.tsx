@@ -149,13 +149,19 @@ export default function DataTable({
     if (selectedCount === 0) {
       return (
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={() => setIsAddNewDocument(true)}
           startIcon={<AddIcon />}
           sx={{
             borderRadius: 2,
             px: 3,
             py: 1,
+            borderColor: "rgba(255, 255, 255, 0.23)",
+            color: "#ffffff",
+            "&:hover": {
+              borderColor: "rgba(255, 255, 255, 0.4)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+            },
           }}
         >
           Add
