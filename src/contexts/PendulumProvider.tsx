@@ -8,8 +8,10 @@ const PendulumContext = createContext<PendulumContextType>(
 );
 
 const config = {
-  apiUrl: "http://localhost:3000",
-  eventsUrl: "http://localhost:8080/events",
+  // apiUrl: "http://localhost:3000",
+  // eventsUrl: "http://localhost:8080/events",
+  apiUrl: "http://Pendul-ALBAE-OTCsATPkxNV1-1475748873.us-east-1.elb.amazonaws.com",
+  eventsUrl: "http://Pendul-ALBAE-OTCsATPkxNV1-1475748873.us-east-1.elb.amazonaws.com/events",
 };
 
 function PendulumProvider({ children }: { children: ReactNode }) {
