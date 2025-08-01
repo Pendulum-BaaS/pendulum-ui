@@ -1,3 +1,5 @@
+import type { PendulumClient } from "../../../pendulum-sdk/src/pendulumClient";
+
 export interface Document {
   id: string;
   [key: string]: any;
@@ -20,3 +22,8 @@ export interface EditPermissionsDrawerProps {
   onClose: () => void;
   collectionName: string;
 }
+
+export interface PendulumContextType {
+  client: PendulumClient,
+  isConnected: boolean
+};
