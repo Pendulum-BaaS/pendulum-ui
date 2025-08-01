@@ -1,5 +1,5 @@
 import { PendulumContext } from "./contexts/PendulumProvider";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Header from "./components/Header";
 import CollapsedSidebar from "./components/CollapsedSidebar";
 import ExpandedSidebar from "./components/ExpandedSidebar";
@@ -7,8 +7,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Data from "./components/Data";
 import Users from "./components/Users";
 import Logs from "./components/Logs";
+import AdminAuthModal from "./components/AdminAuthModal";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import { pendulumGradient } from "./utils/gradients";
+
+import type {} from '@mui/x-data-grid/themeAugmentation'; // necessary?
 
 const darkTheme = createTheme({
   palette: {
@@ -149,6 +152,19 @@ const darkTheme = createTheme({
 function App() {
   const { client } = useContext(PendulumContext);
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const authenticated = client.isAuthenticated();
+      setIsAuthenticated(authenticated);
+    };
+
+    checkAuth();
+
+    // const authCheckInterval = setInterval(checkAuth, 1000); // Set up an interval to check auth state (handles token clearing on 401s)
+    // return () => clearInterval(authCheckInterval);
+  }, [client]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -163,39 +179,50 @@ function App() {
             "linear-gradient(135deg, #1a1a2e 0%, #2d1b69 50%, #6a4c93 100%)",
         }}
       >
-        <Header />
+        {/* Admin Auth model, shows when not authenticated */}
+        <AdminAuthModal
+          open={!isAuthenticated}
+          onAuthSuccess={() => setIsAuthenticated(true)}
+        />
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            flex: 1,
-            overflow: "hidden",
-          }}
-        >
-          {sidebarCollapsed ? (
-            <CollapsedSidebar expand={() => setSidebarCollapsed(false)} />
-          ) : (
-            <ExpandedSidebar collapse={() => setSidebarCollapsed(true)} />
-          )}
+        {/*Main Dashboard, only renders when authenticated*/}
+        {isAuthenticated && (
+          <>
+            <Header />
 
-          <Box
-            component="main"
-            sx={{
-              flex: 1,
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Routes>
-              <Route path="/" element={<Navigate to="/data" />}></Route>
-              <Route path="/data" element={<Data client={client} />}></Route>
-              <Route path="/users" element={<Users client={client} />}></Route>
-              <Route path="/logs" element={<Logs client={client} />}></Route>
-            </Routes>
-          </Box>
-        </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                flex: 1,
+                overflow: "hidden",
+              }}
+            >
+              {sidebarCollapsed ? (
+                <CollapsedSidebar expand={() => setSidebarCollapsed(false)} />
+              ) : (
+                <ExpandedSidebar collapse={() => setSidebarCollapsed(true)} />
+              )}
+
+              <Box
+                component="main"
+                sx={{
+                  flex: 1,
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Routes>
+                  <Route path="/" element={<Navigate to="/data" />}></Route>
+                  <Route path="/data" element={<Data client={client} />}></Route>
+                  <Route path="/users" element={<Users client={client} />}></Route>
+                  <Route path="/logs" element={<Logs client={client} />}></Route>
+                </Routes>
+              </Box>
+            </Box>
+          </>
+        )}
       </Box>
     </ThemeProvider>
   );
