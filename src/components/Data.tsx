@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import type { PendulumClient } from "../../../pendulum-sdk/src/pendulumClient";
+import { useState, useEffect, useContext } from "react";
 import { type Document } from "../types/types";
 import { Box } from "@mui/material";
 import CollectionMenu from "./CollectionMenu";
 import DocumentTable from "./DocumentTable";
 import { type GridColDef } from "@mui/x-data-grid";
+import { PendulumContext } from "../contexts/PendulumProvider";
 
-function Data({ client }: { client: PendulumClient }) {
+function Data() {
+  const { client } = useContext(PendulumContext);
   const testCollections = ["todos", "app-test"];
   const [collections, setCollections] = useState<string[]>(testCollections);
   const [activeCollection, setActiveCollection] = useState(testCollections[0]);
