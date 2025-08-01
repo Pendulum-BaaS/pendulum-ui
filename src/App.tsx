@@ -160,7 +160,11 @@ function App() {
       setIsAuthenticated(authenticated);
     };
 
-    checkAuth();
+    if (import.meta.env.MODE === "production") {
+      checkAuth();
+    } else if (import.meta.env.MODE === "development") {
+      setIsAuthenticated(true);
+    }
 
     // const authCheckInterval = setInterval(checkAuth, 1000); // Set up an interval to check auth state (handles token clearing on 401s)
     // return () => clearInterval(authCheckInterval);
@@ -215,9 +219,9 @@ function App() {
               >
                 <Routes>
                   <Route path="/" element={<Navigate to="/data" />}></Route>
-                  <Route path="/data" element={<Data client={client} />}></Route>
-                  <Route path="/users" element={<Users client={client} />}></Route>
-                  <Route path="/logs" element={<Logs client={client} />}></Route>
+                  <Route path="/data" element={<Data />}></Route>
+                  <Route path="/users" element={<Users />}></Route>
+                  <Route path="/logs" element={<Logs />}></Route>
                 </Routes>
               </Box>
             </Box>
