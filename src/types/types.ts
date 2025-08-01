@@ -33,6 +33,15 @@ interface LogConnection {
 
 export type LogEvent = Log | LogConnection;
 
+export interface User {
+  _id: string;
+  username: string;
+  password: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CollectionPermissions {
   create: string[];
   read: string[];
@@ -47,6 +56,6 @@ export interface EditPermissionsDrawerProps {
 }
 
 export interface PendulumContextType {
-  client: PendulumClient,
-  isConnected: boolean
-};
+  client: PendulumClient;
+  isConnected: boolean;
+}
