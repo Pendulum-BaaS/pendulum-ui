@@ -1,21 +1,18 @@
 import { createContext, useRef } from "react";
 import { PendulumClient } from "../../../pendulum-sdk/src/pendulumClient";
-import type { PendulumContextType } from "../types/types";
 import type { ReactNode } from "react";
+
+type PendulumContextType = {
+  client: PendulumClient;
+  isConnected: boolean;
+};
 
 const PendulumContext = createContext<PendulumContextType>(
   {} as PendulumContextType,
 );
 
-const config = {
-  // apiUrl: "http://localhost:3000",
-  // eventsUrl: "http://localhost:8080/events",
-  apiUrl: "http://Pendul-ALBAE-OTCsATPkxNV1-1475748873.us-east-1.elb.amazonaws.com",
-  eventsUrl: "http://Pendul-ALBAE-OTCsATPkxNV1-1475748873.us-east-1.elb.amazonaws.com/events",
-};
-
 function PendulumProvider({ children }: { children: ReactNode }) {
-  const clientRef = useRef<PendulumClient>(new PendulumClient(config));
+  const clientRef = useRef<PendulumClient>(new PendulumClient());
 
   return (
     <PendulumContext.Provider

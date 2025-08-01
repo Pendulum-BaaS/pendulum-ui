@@ -20,7 +20,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
-import LockIcon from "@mui/icons-material/Lock";
 import AddDocumentDrawer from "./AddDocumentDrawer";
 import EditDocumentDrawer from "./EditDocumentDrawer";
 import CollectionPermissionsDrawer from "./CollectionPermissionsDrawer";
@@ -150,13 +149,19 @@ export default function DataTable({
     if (selectedCount === 0) {
       return (
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={() => setIsAddNewDocument(true)}
           startIcon={<AddIcon />}
           sx={{
             borderRadius: 2,
             px: 3,
             py: 1,
+            borderColor: "rgba(255, 255, 255, 0.23)",
+            color: "#ffffff",
+            "&:hover": {
+              borderColor: "rgba(255, 255, 255, 0.4)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+            },
           }}
         >
           Add
@@ -255,25 +260,6 @@ export default function DataTable({
           >
             {activeCollection}
           </Typography>
-
-          <IconButton
-            onClick={() => setIsPermissionsDrawer(true)}
-            sx={{
-              backgroundColor: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: 2,
-              color: "rgba(255, 255, 255, 0.7)",
-              ml: 1,
-              width: 40,
-              height: 40,
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
-                color: "#ffffff",
-              },
-            }}
-          >
-            <LockIcon fontSize="medium" />
-          </IconButton>
         </Box>
 
         <Box sx={{ display: "flex", gap: 1, alignItems: "Center", ml: "auto" }}>
