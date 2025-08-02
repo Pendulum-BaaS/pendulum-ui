@@ -100,21 +100,8 @@ export default function DataTable({
   const handleEditDocument = () => setIsEditDocument(true);
 
   const handleDeleteDocuments = async () => {
-    /* TODO: update logic here after simplifying backend routes */
     try {
-      let result;
-      if (selectedRows.length === 1) {
-        result = await client.db.removeOne(activeCollection, selectedRows[0]);
-      } else if (selectedRows.length === documents.length) {
-        result = await client.db.removeAll(activeCollection);
-      } else {
-        for (let i = 0; i < selectedRows.length; i++) {
-          await client.db.removeOne(activeCollection, selectedRows[i]);
-        }
-        result = {
-          success: true,
-        };
-      }
+      const result = await client.db.removeSome(activeCollection, selectedRows);
       if (result.success) {
         setDocuments((prev) =>
           prev.filter((p) => !selectedRows.includes(p._id)),
