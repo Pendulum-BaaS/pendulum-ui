@@ -8,9 +8,8 @@ import { PendulumContext } from "../contexts/PendulumProvider";
 
 function Data() {
   const { client } = useContext(PendulumContext);
-  const testCollections = ["todos", "app-test"];
-  const [collections, setCollections] = useState<string[]>(testCollections);
-  const [activeCollection, setActiveCollection] = useState(testCollections[0]);
+  const [collections, setCollections] = useState<string[]>([]);
+  const [activeCollection, setActiveCollection] = useState("");
   const [documents, setDocuments] = useState<Document[]>([]);
   const [columns, setColumns] = useState<GridColDef[]>([]);
 
@@ -77,6 +76,26 @@ function Data() {
 
     fetchDocuments();
   }, [activeCollection, client]);
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const response = await client.getAllCollections();
+        if (response.success) {
+          setCollections(response.data.collections.sort());
+          setActiveCollection(response.data.collections.sort()[0]);
+        } else {
+          throw new Error(response.error);
+        }
+      } catch (error) {
+        console.error(error);
+        setCollections([]);
+        setActiveCollection("");
+      }
+    };
+
+    fetchCollections();
+  }, [client]);
 
   return (
     <Box
