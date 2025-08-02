@@ -155,19 +155,23 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkAuth = () => {
-      const authenticated = client.isAuthenticated();
-      setIsAuthenticated(authenticated);
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/pendulum/health", {
+          headers: client.getAuthHeaders(),
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch {
+        setIsAuthenticated(false);
+      }
     };
 
-    if (import.meta.env.MODE === "production") {
-      checkAuth();
-    } else if (import.meta.env.MODE === "development") {
-      setIsAuthenticated(true);
-    }
-
-    // const authCheckInterval = setInterval(checkAuth, 1000); // Set up an interval to check auth state (handles token clearing on 401s)
-    // return () => clearInterval(authCheckInterval);
+    checkAuth();
   }, [client]);
 
   return (
