@@ -22,7 +22,7 @@ export default function Header() {
           sx={{ flexGrow: 1, display: "flex", alignItems: "center", gap: 2 }}
         >
           <img
-            src="src/assets/pendulum.svg"
+            src="/admin/pendulum.svg"
             alt="Pendulum Logo"
             style={{ height: "40px", width: "40px" }}
           ></img>
