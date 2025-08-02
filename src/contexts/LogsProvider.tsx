@@ -18,7 +18,7 @@ const LogsContext = createContext<LogsContextType>({} as LogsContextType);
 function LogsProvider({ children }: { children: ReactNode }) {
   const MAX_LOG_LENGTH = 10000;
   const [logEntries, setLogEntries] = useState<LogData[]>([]);
-  const [logSet, setLogSet] = useState<Set<string>>(new Set());
+  const setLogSet = useState<Set<string>>(new Set())[1];
   const [isConnected, setIsConnected] = useState(false);
 
   const createLogKey = useCallback((logData: LogData): string => {

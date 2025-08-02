@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { PendulumContext } from "../contexts/PendulumProvider";
 
 interface EditPermissionsDrawerProps {
@@ -14,13 +14,7 @@ interface CollectionPermissions {
   delete: string[];
 }
 
-const USER_ROLES = {
-  admin: 'admin',
-  user: 'user',
-  public: 'public',
-} as const;
-
-const ROLE_HIERARCHY = ['admin', 'user', 'public'] as const;
+const ROLE_HIERARCHY = ["admin", "user", "public"] as const;
 const ROLE_LABELS = {
   admin: 'Admin',
   user: 'User', 
@@ -62,7 +56,7 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
     onChange(newRoles);
   };
 
-  const getSegmentStyle = (role: string, index: number) => {
+  const getSegmentStyle = (_role: string, index: number) => {
     const isSelected = ROLE_HIERARCHY.indexOf(currentMinRole as any) >= index;
     const isHovered = hoveredRole && ROLE_HIERARCHY.indexOf(hoveredRole as any) >= index;
     const wouldBeDeselected = hoveredRole && isSelected && ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
@@ -90,7 +84,7 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
     };
   };
 
-  const getTextStyle = (role: string, index: number) => {
+  const getTextStyle = (_role: string, index: number) => {
     const isSelected = ROLE_HIERARCHY.indexOf(currentMinRole as any) >= index;
     const wouldBeDeselected = hoveredRole && isSelected && ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
     
@@ -104,10 +98,9 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
 
   const getRoleIcon = (role: string) => {
     const icons = {
-      admin: '🔒',
-      // user: '👥',
-      user: '🫂',
-      public: '🌐'
+      admin: "🔒",
+      user: "🫂",
+      public: "🌐",
     };
     return icons[role as keyof typeof icons];
   };
@@ -133,8 +126,10 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
                 onMouseEnter={() => setHoveredRole(role)}
                 onMouseLeave={() => setHoveredRole(null)}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <span style={{ fontSize: '16px', ...getTextStyle(role, index) }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "4px" }}
+                >
+                  <span style={{ ...getTextStyle(role, index) }}>
                     {getRoleIcon(role)}
                   </span>
                   <span style={getTextStyle(role, index)}>
@@ -216,8 +211,8 @@ export default function EditPermissionsDrawer({
       } else {
         setError(result.error || 'Failed to fetch permissions');
       }
-    } catch (err) {
-      setError('Failed to fetch permissions');
+    } catch {
+      setError("Failed to fetch permissions");
     } finally {
       setLoading(false);
     }
@@ -281,8 +276,8 @@ export default function EditPermissionsDrawer({
       } else {
         setError(result.error || 'Failed to update permissions');
       }
-    } catch (err) {
-      setError('Failed to update permissions');
+    } catch {
+      setError("Failed to update permissions");
     } finally {
       setSaving(false);
     }
