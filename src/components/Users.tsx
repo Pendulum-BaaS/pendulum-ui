@@ -208,6 +208,7 @@ export default function Users() {
         setUsers((prevUsers) =>
           prevUsers.filter((user) => !selectedRows.includes(user._id)),
         );
+        setSelectedRows([]);
       } else {
         throw new Error("Unable to delete users");
       }

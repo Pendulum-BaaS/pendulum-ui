@@ -1,25 +1,41 @@
+import { PendulumContext } from "../contexts/PendulumProvider";
 import { Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 interface AddCollectionFormProps {
+  collections: string[];
   setCollections: React.Dispatch<React.SetStateAction<string[]>>;
+  setActiveCollection: React.Dispatch<React.SetStateAction<string>>;
   setIsAddCollection: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AddCollectionForm({
+  collections,
   setCollections,
+  setActiveCollection,
   setIsAddCollection,
 }: AddCollectionFormProps) {
   const [collectionName, setCollectionName] = useState("");
+  const { client } = useContext(PendulumContext);
 
-  const handleAddNewCollection = () => {
+  const handleAddNewCollection = async () => {
     if (collectionName.trim()) {
-      setCollections((prev) => [...prev, collectionName.trim()].sort());
-      setIsAddCollection(false);
-      /*
-      TODO: implement backend route for adding collection
-      */
+      try {
+        const cleanedNewCollection = collectionName.trim();
+        const response = await client.createCollection(cleanedNewCollection);
+        if (response.success) {
+          setCollections((prevCollections) =>
+            [...prevCollections, cleanedNewCollection].sort(),
+          );
+          setActiveCollection(collections[0]);
+          setIsAddCollection(false);
+        } else {
+          throw new Error(response.error);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 

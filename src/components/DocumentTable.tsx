@@ -84,37 +84,32 @@ export default function DataTable({
     }
   };
 
-  const handleDeleteCollection = () => {
-    // TODO: Implement backend route that actually removes collection from db
+  const handleDeleteCollection = async () => {
     const confirmed = window.confirm(
       `Are you sure you want to delete this collection? This action cannot be undone.`,
     );
 
     if (!confirmed) return;
 
-    setCollections((prev) => prev.filter((p) => p !== activeCollection));
-    setActiveCollection(collections[0]);
-    handleMenuClose();
+    try {
+      const response = await client.deleteCollection(activeCollection);
+      if (response.success) {
+        setCollections((prev) => prev.filter((p) => p !== activeCollection));
+        setActiveCollection(collections[0]);
+        handleMenuClose();
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleEditDocument = () => setIsEditDocument(true);
 
   const handleDeleteDocuments = async () => {
-    /* TODO: update logic here after simplifying backend routes */
     try {
-      let result;
-      if (selectedRows.length === 1) {
-        result = await client.db.removeOne(activeCollection, selectedRows[0]);
-      } else if (selectedRows.length === documents.length) {
-        result = await client.db.removeAll(activeCollection);
-      } else {
-        for (let i = 0; i < selectedRows.length; i++) {
-          await client.db.removeOne(activeCollection, selectedRows[i]);
-        }
-        result = {
-          success: true,
-        };
-      }
+      const result = await client.db.removeSome(activeCollection, selectedRows);
       if (result.success) {
         setDocuments((prev) =>
           prev.filter((p) => !selectedRows.includes(p._id)),

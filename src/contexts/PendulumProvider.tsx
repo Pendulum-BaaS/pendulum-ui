@@ -12,11 +12,7 @@ const PendulumContext = createContext<PendulumContextType>(
 );
 
 function PendulumProvider({ children }: { children: ReactNode }) {
-  const clientRef = useRef<PendulumClient>(new PendulumClient({
-    appUrl: import.meta.env.VITE_API_URL || "/pendulum",
-    eventsUrl: import.meta.env.VITE_EVENTS_URL || "/pendulum-events",
-    permissionsUrl: import.meta.env.VITE_PERMISSIONS_URL || "/pendulum/permissions",
-  }));
+  const clientRef = useRef<PendulumClient>(new PendulumClient());
 
   return (
     <PendulumContext.Provider

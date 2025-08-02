@@ -145,6 +145,8 @@ export default function CollectionDrawer({
           <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)" }} />
           {isAddCollection ? (
             <AddCollectionForm
+              collections={collections}
+              setActiveCollection={setActiveCollection}
               setIsAddCollection={setIsAddCollection}
               setCollections={setCollections}
             />
