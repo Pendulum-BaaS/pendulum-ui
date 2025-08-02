@@ -1,4 +1,16 @@
 import { useState, useEffect, useContext } from "react";
+import {
+  Drawer,
+  Button,
+  Box,
+  Typography,
+  IconButton,
+  Divider,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import SaveIcon from "@mui/icons-material/Save";
 import { PendulumContext } from "../contexts/PendulumProvider";
 
 interface EditPermissionsDrawerProps {
@@ -16,23 +28,23 @@ interface CollectionPermissions {
 
 const ROLE_HIERARCHY = ["admin", "user", "public"] as const;
 const ROLE_LABELS = {
-  admin: 'Admin',
-  user: 'User', 
-  public: 'Public'
+  admin: "Admin",
+  user: "User",
+  public: "Public",
 };
 
 const CRUD_LABELS = {
-  create: 'Create',
-  read: 'Read',
-  update: 'Update',
-  delete: 'Delete',
+  create: "Create",
+  read: "Read",
+  update: "Update",
+  delete: "Delete",
 };
 
 // Convert array of roles to minimum role level
 const getMinimumRole = (roles: string[]): string => {
-  if (roles.includes('public')) return 'public';
-  if (roles.includes('user')) return 'user';
-  return 'admin';
+  if (roles.includes("public")) return "public";
+  if (roles.includes("user")) return "user";
+  return "admin";
 };
 
 // Convert minimum role to array of allowed roles
@@ -58,41 +70,56 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
 
   const getSegmentStyle = (_role: string, index: number) => {
     const isSelected = ROLE_HIERARCHY.indexOf(currentMinRole as any) >= index;
-    const isHovered = hoveredRole && ROLE_HIERARCHY.indexOf(hoveredRole as any) >= index;
-    const wouldBeDeselected = hoveredRole && isSelected && ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
-    
-    let borderRadius = '0px';
-    if (index === 0) borderRadius = '8px 0 0 8px';
-    if (index === ROLE_HIERARCHY.length - 1) borderRadius = '0 8px 8px 0';
+    const isHovered =
+      hoveredRole && ROLE_HIERARCHY.indexOf(hoveredRole as any) >= index;
+    const wouldBeDeselected =
+      hoveredRole &&
+      isSelected &&
+      ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
+
+    let borderRadius = "0px";
+    if (index === 0) borderRadius = "8px 0 0 8px";
+    if (index === ROLE_HIERARCHY.length - 1) borderRadius = "0 8px 8px 0";
 
     return {
       flex: 1,
-      height: '40px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      transition: 'all 0.1s ease',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
-      borderLeft: index === 0 ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
+      height: "40px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      transition: "all 0.1s ease",
+      border: "1px solid rgba(255, 255, 255, 0.2)",
+      borderLeft: index === 0 ? "1px solid rgba(255, 255, 255, 0.2)" : "none",
       borderRadius,
-      background: wouldBeDeselected 
-        ? 'rgba(255, 255, 255, 0.1)' // Almost-unselected preview
-        : isSelected 
-          ? (isHovered ? '#ffed4e' : '#ffd700') // Solid yellow instead of gradient
-          : (isHovered ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 255, 255, 0.05)'),
+      background: wouldBeDeselected
+        ? "rgba(255, 255, 255, 0.1)" // Almost-unselected preview
+        : isSelected
+          ? isHovered
+            ? "#ffed4e"
+            : "#ffd700" // Solid yellow instead of gradient
+          : isHovered
+            ? "rgba(255, 215, 0, 0.2)"
+            : "rgba(255, 255, 255, 0.05)",
     };
   };
 
   const getTextStyle = (_role: string, index: number) => {
     const isSelected = ROLE_HIERARCHY.indexOf(currentMinRole as any) >= index;
-    const wouldBeDeselected = hoveredRole && isSelected && ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
-    
+    const wouldBeDeselected =
+      hoveredRole &&
+      isSelected &&
+      ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
+
     return {
-      color: wouldBeDeselected ? 'rgba(255, 255, 255, 0.5)' : isSelected ? '#000000' : '#ffffff',
-      fontWeight: (isSelected && !wouldBeDeselected) ? '600' : '500',
-      fontSize: '14px',
-      userSelect: 'none' as const,
+      color: wouldBeDeselected
+        ? "rgba(255, 255, 255, 0.5)"
+        : isSelected
+          ? "#000000"
+          : "#ffffff",
+      fontWeight: isSelected && !wouldBeDeselected ? "600" : "500",
+      fontSize: "14px",
+      userSelect: "none" as const,
     };
   };
 
@@ -106,79 +133,109 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
   };
 
   return (
-    <div style={{ marginBottom: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-        <div style={{ 
-          color: '#ffffff', 
-          fontWeight: '600',
-          minWidth: '80px',
-          fontSize: '14px'
-        }}>
+    <Box sx={{ marginBottom: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+        <Typography
+          sx={{
+            color: "#ffffff",
+            fontWeight: "600",
+            minWidth: "70px",
+            fontSize: "13px",
+          }}
+        >
           {CRUD_LABELS[action]}
-        </div>
-        <div style={{ flex: 1, marginLeft: '16px' }}>
-          <div style={{ display: 'flex', borderRadius: '8px', overflow: 'hidden' }}>
+        </Typography>
+        <Box sx={{ flex: 1, marginLeft: 1.5 }}>
+          <Box
+            sx={{ display: "flex", borderRadius: "6px", overflow: "hidden" }}
+          >
             {ROLE_HIERARCHY.map((role, index) => (
-              <div
+              <Box
                 key={role}
-                style={getSegmentStyle(role, index)}
+                sx={{
+                  ...getSegmentStyle(role, index),
+                  height: "32px", // Reduced from 40px
+                }}
                 onClick={() => handleRoleClick(role)}
                 onMouseEnter={() => setHoveredRole(role)}
                 onMouseLeave={() => setHoveredRole(null)}
               >
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "4px" }}
-                >
-                  <span style={{ ...getTextStyle(role, index) }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                  <Box
+                    component="span"
+                    sx={{
+                      ...getTextStyle(role, index),
+                      fontSize: "12px", // Slightly smaller
+                    }}
+                  >
                     {getRoleIcon(role)}
-                  </span>
-                  <span style={getTextStyle(role, index)}>
+                  </Box>
+                  <Box
+                    component="span"
+                    sx={{
+                      ...getTextStyle(role, index),
+                      fontSize: "12px", // Reduced from 14px
+                    }}
+                  >
                     {ROLE_LABELS[role]}
-                  </span>
-                </div>
-              </div>
+                  </Box>
+                </Box>
+              </Box>
             ))}
-          </div>
-        </div>
-      </div>
-      
-      <div style={{ 
-        color: 'rgba(255, 255, 255, 0.6)',
-        fontSize: '12px',
-        marginLeft: '96px'
-      }}>
-        {currentMinRole === 'admin' && 'Only admins can perform this action'}
-        {currentMinRole === 'user' && 'Admins and users can perform this action'}
-        {currentMinRole === 'public' && 'Everyone can perform this action'}
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Box>
+
+      <Typography
+        sx={{
+          color: "rgba(255, 255, 255, 0.6)",
+          fontSize: "11px", // Reduced from 12px
+          marginLeft: "85px", // Adjusted for new label width
+        }}
+      >
+        {currentMinRole === "admin" && "Only admins can perform this action"}
+        {currentMinRole === "user" &&
+          "Admins and users can perform this action"}
+        {currentMinRole === "public" && "Everyone can perform this action"}
+      </Typography>
+    </Box>
   );
 }
 
-function PermissionTemplate({ label, color, onClick }: { label: string; color: string; onClick: () => void }) {
+function PermissionTemplate({
+  label,
+  color,
+  onClick,
+}: {
+  label: string;
+  color: string;
+  onClick: () => void;
+}) {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
-    <button
+    <Button
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{
-        padding: '6px 12px',
-        borderRadius: '16px',
+      sx={{
+        padding: "4px 10px", // Reduced padding
+        borderRadius: "14px", // Slightly smaller
         border: `1px solid ${color}30`,
         backgroundColor: isHovered ? `${color}30` : `${color}20`,
         color: color,
-        fontSize: '12px',
-        fontWeight: '500',
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        marginRight: '8px',
-        marginBottom: '8px',
+        fontSize: "11px", // Reduced from 12px
+        fontWeight: "500",
+        cursor: "pointer",
+        transition: "all 0.2s ease",
+        marginRight: 0.8, // Reduced margin
+        marginBottom: 0.8,
+        textTransform: "none",
+        minWidth: "auto",
       }}
     >
       {label}
-    </button>
+    </Button>
   );
 }
 
@@ -188,7 +245,9 @@ export default function EditPermissionsDrawer({
   collectionName,
 }: EditPermissionsDrawerProps) {
   const { client } = useContext(PendulumContext);
-  const [permissions, setPermissions] = useState<CollectionPermissions | null>(null);
+  const [permissions, setPermissions] = useState<CollectionPermissions | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -209,7 +268,7 @@ export default function EditPermissionsDrawer({
       if (result.success) {
         setPermissions(result.data.data.permissions);
       } else {
-        setError(result.error || 'Failed to fetch permissions');
+        setError(result.error || "Failed to fetch permissions");
       }
     } catch {
       setError("Failed to fetch permissions");
@@ -218,40 +277,45 @@ export default function EditPermissionsDrawer({
     }
   };
 
-  const handlePermissionChange = (action: keyof CollectionPermissions, newRoles: string[]) => {
+  const handlePermissionChange = (
+    action: keyof CollectionPermissions,
+    newRoles: string[],
+  ) => {
     if (!permissions) return;
-    
+
     setPermissions({
       ...permissions,
       [action]: newRoles,
     });
   };
 
-  const applyTemplate = (template: 'public' | 'user' | 'admin' | 'readonly') => {
+  const applyTemplate = (
+    template: "public" | "user" | "admin" | "readonly",
+  ) => {
     const templates = {
       public: {
-        create: ['admin', 'user', 'public'],
-        read: ['admin', 'user', 'public'],
-        update: ['admin', 'user', 'public'],
-        delete: ['admin', 'user', 'public'],
+        create: ["admin", "user", "public"],
+        read: ["admin", "user", "public"],
+        update: ["admin", "user", "public"],
+        delete: ["admin", "user", "public"],
       },
       user: {
-        create: ['admin', 'user'],
-        read: ['admin', 'user'],
-        update: ['admin', 'user'],
-        delete: ['admin', 'user'],
+        create: ["admin", "user"],
+        read: ["admin", "user"],
+        update: ["admin", "user"],
+        delete: ["admin", "user"],
       },
       admin: {
-        create: ['admin'],
-        read: ['admin'],
-        update: ['admin'],
-        delete: ['admin'],
+        create: ["admin"],
+        read: ["admin"],
+        update: ["admin"],
+        delete: ["admin"],
       },
       readonly: {
-        create: ['admin'],
-        read: ['admin', 'user', 'public'],
-        update: ['admin'],
-        delete: ['admin'],
+        create: ["admin"],
+        read: ["admin", "user", "public"],
+        update: ["admin"],
+        delete: ["admin"],
       },
     };
 
@@ -260,21 +324,24 @@ export default function EditPermissionsDrawer({
 
   const handleSave = async () => {
     if (!permissions) return;
-    
+
     setSaving(true);
     setError(null);
     setSuccessMessage(null);
-    
+
     try {
-      const result = await client.updateCollectionPermissions(collectionName, permissions);
+      const result = await client.updateCollectionPermissions(
+        collectionName,
+        permissions,
+      );
       if (result.success) {
-        setSuccessMessage('Permissions updated successfully');
+        setSuccessMessage("Permissions updated successfully");
         setTimeout(() => {
           setSuccessMessage(null);
           onClose();
         }, 2000);
       } else {
-        setError(result.error || 'Failed to update permissions');
+        setError(result.error || "Failed to update permissions");
       }
     } catch {
       setError("Failed to update permissions");
@@ -290,281 +357,258 @@ export default function EditPermissionsDrawer({
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      right: 0,
-      width: '600px',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      backdropFilter: 'blur(20px)',
-      borderLeft: '1px solid rgba(255, 255, 255, 0.12)',
-      zIndex: 1000,
-      display: 'flex',
-      flexDirection: 'column',
-    }}>
-      {/* Header */}
-      <div style={{
-        padding: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span style={{ color: '#ffd700', fontSize: '24px' }}>🔐</span>
-          <div>
-            <h2 style={{ 
-              color: 'rgba(255, 255, 255, 0.7)', 
-              margin: '4px 0 0 0',
-              fontSize: '28px', // Collection name now bigger and on top
-              fontWeight: '600'
-            }}>
-              {collectionName}
-            </h2>
-            <p style={{ 
-              color: '#ffffff', 
-              fontWeight: '600', 
-              margin: 0,
-              fontSize: '20px' // Collection Permissions label now smaller and below
-            }}>
-              Collection Permissions
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={handleClose}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#ffffff',
-            fontSize: '20px',
-            cursor: 'pointer',
-            padding: '8px',
-            borderRadius: '4px',
-            transition: 'background-color 0.2s ease',
+    <Drawer
+      open={isOpen}
+      anchor="right"
+      PaperProps={{
+        sx: {
+          width: { xs: "100%", sm: 500, md: 600 },
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          backdropFilter: "blur(20px)",
+          borderLeft: "1px solid rgba(255, 255, 255, 0.12)",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            p: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
         >
-          ✕
-        </button>
-      </div>
-
-      {/* Content */}
-      <div style={{ 
-        flex: 1, 
-        padding: '24px', 
-        display: 'flex', 
-        flexDirection: 'column',
-        overflowY: 'auto'
-      }}>
-        {error && (
-          <div style={{
-            marginBottom: '16px',
-            padding: '12px 16px',
-            backgroundColor: 'rgba(244, 67, 54, 0.1)',
-            color: '#ff6b6b',
-            border: '1px solid rgba(244, 67, 54, 0.3)',
-            borderRadius: '8px',
-            fontSize: '14px'
-          }}>
-            {error}
-          </div>
-        )}
-        
-        {successMessage && (
-          <div style={{
-            marginBottom: '16px',
-            padding: '12px 16px',
-            backgroundColor: 'rgba(46, 125, 50, 0.1)',
-            color: '#69f0ae',
-            border: '1px solid rgba(46, 125, 50, 0.3)',
-            borderRadius: '8px',
-            fontSize: '14px'
-          }}>
-            {successMessage}
-          </div>
-        )}
-
-        {loading ? (
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center', 
-            flex: 1 
-          }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              border: '3px solid rgba(255, 215, 0, 0.3)',
-              borderTop: '3px solid #ffd700',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
-            }} />
-            <style>{`
-              @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-              }
-            `}</style>
-          </div>
-        ) : permissions ? (
-          <>
-            {/* Permission Templates Section */}
-            <div style={{ marginBottom: '32px' }}>
-              <h3 style={{ 
-                color: '#ffffff', 
-                marginBottom: '16px', 
-                fontWeight: '600',
-                fontSize: '18px'
-              }}>
-                Permission Templates
-              </h3>
-              <p style={{ 
-                color: 'rgba(255, 255, 255, 0.7)', 
-                marginBottom: '16px',
-                fontSize: '14px'
-              }}>
-                Quick setup with common permission patterns
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <PermissionTemplate
-                  label="Public Access"
-                  color="#81c784"
-                  onClick={() => applyTemplate('public')}
-                />
-                <PermissionTemplate
-                  label="User Access"
-                  color="#64b5f6"
-                  onClick={() => applyTemplate('user')}
-                />
-                <PermissionTemplate
-                  label="Admin Only"
-                  color="#e57373"
-                  onClick={() => applyTemplate('admin')}
-                />
-                <PermissionTemplate
-                  label="Read Only"
-                  color="#ba68c8"
-                  onClick={() => applyTemplate('readonly')}
-                />
-              </div>
-            </div>
-
-            <div style={{ 
-              height: '1px', 
-              backgroundColor: 'rgba(255, 255, 255, 0.12)', 
-              marginBottom: '32px' 
-            }} />
-
-            {/* CRUD Permissions Section */}
-            <div style={{ marginBottom: '32px' }}>
-              <h3 style={{ 
-                color: '#ffffff', 
-                marginBottom: '24px', 
-                fontWeight: '600',
-                fontSize: '18px'
-              }}>
-                Custom Permissions
-              </h3>
-              <p style={{ 
-                color: 'rgba(255, 255, 255, 0.7)', 
-                marginBottom: '24px',
-                fontSize: '14px'
-              }}>
-                Set minimum role required for each operation. Admin users always have full access.
-              </p>
-              
-              <div style={{ marginTop: '24px' }}>
-                {(['create', 'read', 'update', 'delete'] as const).map((action) => (
-                  <RoleSlider
-                    key={action}
-                    action={action}
-                    currentRoles={permissions[action]}
-                    onChange={(newRoles) => handlePermissionChange(action, newRoles)}
-                  />
-                ))}
-              </div>
-            </div>
-          </>
-        ) : null}
-      </div>
-
-      {/* Footer */}
-      {permissions && !loading && (
-        <div style={{
-          padding: '24px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '16px',
-        }}>
-          <button
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Typography component="span" sx={{ fontSize: "24px" }}>
+              🔐
+            </Typography>
+            <Box>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "#ffffff",
+                  margin: 0,
+                  fontWeight: "600",
+                }}
+              >
+                {collectionName}
+              </Typography>
+              <Typography
+                sx={{
+                  color: "rgba(255, 255, 255, 0.7)",
+                  fontWeight: "600",
+                  margin: 0,
+                  fontSize: "16px",
+                }}
+              >
+                Collection Permissions
+              </Typography>
+            </Box>
+          </Box>
+          <IconButton
             onClick={handleClose}
-            disabled={saving}
-            style={{
-              padding: '12px 24px',
-              borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.23)',
-              backgroundColor: 'transparent',
-              color: '#ffffff',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: saving ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease',
-              opacity: saving ? 0.6 : 1,
+            size="small"
+            sx={{
+              color: "#ffffff",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+              },
             }}
-            onMouseEnter={(e) => !saving && (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)')}
-            onMouseLeave={(e) => !saving && (e.currentTarget.style.backgroundColor = 'transparent')}
           >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            style={{
-              padding: '12px 24px',
-              borderRadius: '8px',
-              border: 'none',
-              background: saving 
-                ? 'rgba(255, 215, 0, 0.5)' 
-                : 'linear-gradient(135deg, #e67e22 0%, #f39c12 30%, #f1c40f 70%, #f4d03f 100%)', // Exact pendulumGradient
-              color: '#1a1a2e', // Dark text like selected tab
-              fontSize: '14px',
-              fontWeight: '700', // Bold like selected tab
-              cursor: saving ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-            onMouseEnter={(e) => !saving && (e.currentTarget.style.background = 'linear-gradient(135deg, #e67e22 0%, #f39c12 30%, #f1c40f 70%, #f4d03f 100%)')} // Keep same gradient on hover
-            onMouseLeave={(e) => !saving && (e.currentTarget.style.background = 'linear-gradient(135deg, #e67e22 0%, #f39c12 30%, #f1c40f 70%, #f4d03f 100%)')} // Keep same gradient
-          >
-            {saving ? (
-              <>
-                <div style={{
-                  width: '16px',
-                  height: '16px',
-                  border: '2px solid rgba(0, 0, 0, 0.3)',
-                  borderTop: '2px solid #000000',
-                  borderRadius: '50%',
-                  animation: 'spin 1s linear infinite'
-                }} />
-                Saving...
-              </>
-            ) : (
-              <>
-                💾 Save Changes
-              </>
-            )}
-          </button>
-        </div>
-      )}
-    </div>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        {/* Content */}
+        <Box
+          sx={{
+            flex: 1,
+            p: 2.5, // Reduced padding
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden", // Remove scrolling
+          }}
+        >
+          {error && (
+            <Alert severity="error" sx={{ mb: 1.5 }}>
+              {error}
+            </Alert>
+          )}
+
+          {successMessage && (
+            <Alert severity="success" sx={{ mb: 1.5 }}>
+              {successMessage}
+            </Alert>
+          )}
+
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+                flexDirection: "column",
+                gap: 2,
+              }}
+            >
+              <CircularProgress sx={{ color: "#ffd700" }} />
+              <Typography sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                Loading permissions...
+              </Typography>
+            </Box>
+          ) : permissions ? (
+            <>
+              {/* Permission Templates Section */}
+              <Box sx={{ mb: 2.5 }}>
+                {" "}
+                {/* Reduced margin */}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#ffffff",
+                    mb: 1.5, // Reduced margin
+                    fontWeight: "600",
+                    fontSize: "16px", // Slightly smaller
+                  }}
+                >
+                  Permission Templates
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    mb: 1.5, // Reduced margin
+                    fontSize: "13px",
+                  }}
+                >
+                  Quick setup with common permission patterns
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+                  <PermissionTemplate
+                    label="Public Access"
+                    color="#81c784"
+                    onClick={() => applyTemplate("public")}
+                  />
+                  <PermissionTemplate
+                    label="User Access"
+                    color="#64b5f6"
+                    onClick={() => applyTemplate("user")}
+                  />
+                  <PermissionTemplate
+                    label="Admin Only"
+                    color="#e57373"
+                    onClick={() => applyTemplate("admin")}
+                  />
+                  <PermissionTemplate
+                    label="Read Only"
+                    color="#ba68c8"
+                    onClick={() => applyTemplate("readonly")}
+                  />
+                </Box>
+              </Box>
+
+              <Divider
+                sx={{ borderColor: "rgba(255, 255, 255, 0.12)", mb: 2.5 }}
+              />
+
+              {/* CRUD Permissions Section */}
+              <Box>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#ffffff",
+                    mb: 2, // Reduced margin
+                    fontWeight: "600",
+                    fontSize: "16px", // Slightly smaller
+                  }}
+                >
+                  Custom Permissions
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    mb: 2, // Reduced margin
+                    fontSize: "13px",
+                  }}
+                >
+                  Set minimum role required for each operation. Admin users
+                  always have full access.
+                </Typography>
+
+                <Box>
+                  {(["create", "read", "update", "delete"] as const).map(
+                    (action) => (
+                      <RoleSlider
+                        key={action}
+                        action={action}
+                        currentRoles={permissions[action]}
+                        onChange={(newRoles) =>
+                          handlePermissionChange(action, newRoles)
+                        }
+                      />
+                    ),
+                  )}
+                </Box>
+              </Box>
+            </>
+          ) : null}
+        </Box>
+
+        {/* Footer */}
+        {permissions && !loading && (
+          <>
+            <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.12)" }} />
+            <Box
+              sx={{
+                p: 2.5, // Reduced padding
+                display: "flex",
+                gap: 2,
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button
+                variant="outlined"
+                onClick={handleClose}
+                disabled={saving}
+                sx={{
+                  borderColor: "rgba(255, 255, 255, 0.23)",
+                  color: "#ffffff",
+                  "&:hover": {
+                    borderColor: "rgba(255, 255, 255, 0.4)",
+                    backgroundColor: "rgba(255, 255, 255, 0.05)",
+                  },
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleSave}
+                disabled={saving}
+                startIcon={
+                  saving ? (
+                    <CircularProgress size={16} sx={{ color: "#1a1a2e" }} />
+                  ) : (
+                    <SaveIcon />
+                  )
+                }
+                sx={{ px: 4 }}
+              >
+                {saving ? "Saving..." : "Save Changes"}
+              </Button>
+            </Box>
+          </>
+        )}
+      </Box>
+    </Drawer>
   );
 }
