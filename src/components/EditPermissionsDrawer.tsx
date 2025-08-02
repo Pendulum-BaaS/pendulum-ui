@@ -1,28 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { PendulumContext } from "../contexts/PendulumProvider";
 
-// Simulated context - replace with your actual PendulumContext
-// const PendulumContext = createContext({
-//   client: {
-//     getCollectionPermissions: async (collectionName: string) => ({
-//       success: true,
-//       data: {
-//         data: {
-//           permissions: {
-//             create: ['admin', 'user'],
-//             read: ['admin', 'user', 'public'],
-//             update: ['admin'],
-//             delete: ['admin']
-//           }
-//         }
-//       }
-//     }),
-//     updateCollectionPermissions: async (collectionName: string, permissions: any) => ({
-//       success: true
-//     })
-//   }
-// });
-
 interface EditPermissionsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -87,6 +65,7 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
   const getSegmentStyle = (role: string, index: number) => {
     const isSelected = ROLE_HIERARCHY.indexOf(currentMinRole as any) >= index;
     const isHovered = hoveredRole && ROLE_HIERARCHY.indexOf(hoveredRole as any) >= index;
+    const wouldBeDeselected = hoveredRole && isSelected && ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
     
     let borderRadius = '0px';
     if (index === 0) borderRadius = '8px 0 0 8px';
@@ -99,22 +78,25 @@ function RoleSlider({ action, currentRoles, onChange }: RoleSliderProps) {
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
-      transition: 'all 0.2s ease',
+      transition: 'all 0.1s ease',
       border: '1px solid rgba(255, 255, 255, 0.2)',
       borderLeft: index === 0 ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
       borderRadius,
-      background: isSelected 
-        ? (isHovered ? 'linear-gradient(135deg, #ffed4e 0%, #ffd700 100%)' : 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)')
-        : (isHovered ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 255, 255, 0.05)'),
+      background: wouldBeDeselected 
+        ? 'rgba(255, 255, 255, 0.1)' // Almost-unselected preview
+        : isSelected 
+          ? (isHovered ? '#ffed4e' : '#ffd700') // Solid yellow instead of gradient
+          : (isHovered ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 255, 255, 0.05)'),
     };
   };
 
   const getTextStyle = (role: string, index: number) => {
     const isSelected = ROLE_HIERARCHY.indexOf(currentMinRole as any) >= index;
+    const wouldBeDeselected = hoveredRole && isSelected && ROLE_HIERARCHY.indexOf(hoveredRole as any) < index;
     
     return {
-      color: isSelected ? '#000000' : '#ffffff',
-      fontWeight: isSelected ? '600' : '500',
+      color: wouldBeDeselected ? 'rgba(255, 255, 255, 0.5)' : isSelected ? '#000000' : '#ffffff',
+      fontWeight: (isSelected && !wouldBeDeselected) ? '600' : '500',
       fontSize: '14px',
       userSelect: 'none' as const,
     };
@@ -341,19 +323,20 @@ export default function EditPermissionsDrawer({
           <span style={{ color: '#ffd700', fontSize: '24px' }}>🔐</span>
           <div>
             <h2 style={{ 
+              color: 'rgba(255, 255, 255, 0.7)', 
+              margin: '4px 0 0 0',
+              fontSize: '28px', // Collection name now bigger and on top
+              fontWeight: '600'
+            }}>
+              {collectionName}
+            </h2>
+            <p style={{ 
               color: '#ffffff', 
               fontWeight: '600', 
               margin: 0,
-              fontSize: '20px'
+              fontSize: '20px' // Collection Permissions label now smaller and below
             }}>
               Collection Permissions
-            </h2>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.7)', 
-              margin: '4px 0 0 0',
-              fontSize: '14px'
-            }}>
-              {collectionName}
             </p>
           </div>
         </div>
@@ -554,18 +537,18 @@ export default function EditPermissionsDrawer({
               border: 'none',
               background: saving 
                 ? 'rgba(255, 215, 0, 0.5)' 
-                : 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)',
-              color: '#000000',
+                : 'linear-gradient(135deg, #e67e22 0%, #f39c12 30%, #f1c40f 70%, #f4d03f 100%)', // Exact pendulumGradient
+              color: '#1a1a2e', // Dark text like selected tab
               fontSize: '14px',
-              fontWeight: '600',
+              fontWeight: '700', // Bold like selected tab
               cursor: saving ? 'not-allowed' : 'pointer',
               transition: 'all 0.2s ease',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
             }}
-            onMouseEnter={(e) => !saving && (e.currentTarget.style.background = 'linear-gradient(135deg, #ffed4e 0%, #ffd700 100%)')}
-            onMouseLeave={(e) => !saving && (e.currentTarget.style.background = 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)')}
+            onMouseEnter={(e) => !saving && (e.currentTarget.style.background = 'linear-gradient(135deg, #e67e22 0%, #f39c12 30%, #f1c40f 70%, #f4d03f 100%)')} // Keep same gradient on hover
+            onMouseLeave={(e) => !saving && (e.currentTarget.style.background = 'linear-gradient(135deg, #e67e22 0%, #f39c12 30%, #f1c40f 70%, #f4d03f 100%)')} // Keep same gradient
           >
             {saving ? (
               <>
