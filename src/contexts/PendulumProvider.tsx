@@ -1,5 +1,5 @@
 import { createContext, useRef } from "react";
-import { PendulumClient } from "../../../pendulum-sdk/src/pendulumClient";
+import { PendulumClient } from "@pendulum/sdk";
 import type { ReactNode } from "react";
 
 type PendulumContextType = {
@@ -12,7 +12,7 @@ const PendulumContext = createContext<PendulumContextType>(
 );
 
 function PendulumProvider({ children }: { children: ReactNode }) {
-  const clientRef = useRef<PendulumClient>(new PendulumClient());
+  const clientRef = useRef<PendulumClient>(new PendulumClient(false));
 
   return (
     <PendulumContext.Provider

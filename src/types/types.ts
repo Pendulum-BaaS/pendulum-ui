@@ -1,4 +1,4 @@
-import type { PendulumClient } from "../../../pendulum-sdk/src/pendulumClient";
+import type { PendulumClient } from "@pendulum/sdk";
 
 export interface Document {
   id: string;
