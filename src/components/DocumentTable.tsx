@@ -84,17 +84,25 @@ export default function DataTable({
     }
   };
 
-  const handleDeleteCollection = () => {
-    // TODO: Implement backend route that actually removes collection from db
+  const handleDeleteCollection = async () => {
     const confirmed = window.confirm(
       `Are you sure you want to delete this collection? This action cannot be undone.`,
     );
 
     if (!confirmed) return;
 
-    setCollections((prev) => prev.filter((p) => p !== activeCollection));
-    setActiveCollection(collections[0]);
-    handleMenuClose();
+    try {
+      const response = await client.deleteCollection(activeCollection);
+      if (response.success) {
+        setCollections((prev) => prev.filter((p) => p !== activeCollection));
+        setActiveCollection(collections[0]);
+        handleMenuClose();
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleEditDocument = () => setIsEditDocument(true);
