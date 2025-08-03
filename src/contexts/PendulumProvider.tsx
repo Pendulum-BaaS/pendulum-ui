@@ -12,7 +12,7 @@ const PendulumContext = createContext<PendulumContextType>(
 );
 
 function PendulumProvider({ children }: { children: ReactNode }) {
-  const clientRef = useRef<PendulumClient>(new PendulumClient(false));
+  const clientRef = useRef<PendulumClient>(new PendulumClient());
 
   return (
     <PendulumContext.Provider
