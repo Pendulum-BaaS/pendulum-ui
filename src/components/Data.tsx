@@ -63,39 +63,53 @@ function Data() {
   };
 
   useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const response = await client.db.getAll(activeCollection);
-        setColumns(getAllColumns(response.data));
-        setDocuments(response.data);
-      } catch (error) {
-        console.error(error);
+  const fetchDocuments = async () => {
+    if (!activeCollection || activeCollection.trim() === "") {
+      setDocuments([]);
+      setColumns([]);
+      return;
+    }
+
+    try {
+      const response = await client.db.getAll(activeCollection);
+      if (response.success) {
+        const dataArray = Array.isArray(response.data) ? response.data : [];
+        setColumns(getAllColumns(dataArray));
+        setDocuments(dataArray);
+      } else {
+        setColumns([]);
         setDocuments([]);
       }
-    };
+    } catch (error) {
+      console.error("Error in fetchDocuments:", error);
+      setDocuments([]);
+      setColumns([]);
+    }
+  };
 
-    fetchDocuments();
-  }, [activeCollection, client]);
+  fetchDocuments();
+}, [activeCollection, client]);
 
   useEffect(() => {
-    const fetchCollections = async () => {
-      try {
-        const response = await client.getAllCollections();
-        if (response.success) {
-          setCollections(response.data.collections.sort());
-          setActiveCollection(response.data.collections.sort()[0]);
-        } else {
-          throw new Error(response.error);
-        }
-      } catch (error) {
-        console.error(error);
-        setCollections([]);
-        setActiveCollection("");
+  const fetchCollections = async () => {
+    try {
+      const response = await client.getAllCollections();
+      if (response.success) {
+        const collections = response.data.collections.sort();
+        setCollections(collections);
+        setActiveCollection(collections[0] || "");
+      } else {
+        throw new Error(response.error);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+      setCollections([]);
+      setActiveCollection("");
+    }
+  };
 
-    fetchCollections();
-  }, [client]);
+  fetchCollections();
+}, [client]);
 
   return (
     <Box
