@@ -157,14 +157,19 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("/pendulum/health", {
-          headers: client.getAuthHeaders(),
-        });
+        const adminKey = client.getAdminKey();
 
-        if (response.ok) {
+        if (!adminKey) {
+          setIsAuthenticated(false);
+          return;
+        }
+
+        const validation = await client.validateAdminKey(adminKey);
+        if (validation.success) {
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);
+          client.clearAdminKey();
         }
       } catch {
         setIsAuthenticated(false);
