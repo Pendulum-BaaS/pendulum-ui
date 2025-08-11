@@ -1,5 +1,5 @@
 import { createContext, useRef } from "react";
-import { PendulumClient } from "@pendulum/sdk";
+import { PendulumClient } from "@pendulum-baas/sdk";
 import type { ReactNode } from "react";
 
 type PendulumContextType = {
