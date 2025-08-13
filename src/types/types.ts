@@ -59,3 +59,19 @@ export interface PendulumContextType {
   client: PendulumClient;
   isConnected: boolean;
 }
+
+/* eslint-disable */
+export interface DatabaseEvent {
+  collection: string;
+  action: "insert" | "update" | "delete";
+  operationId: string;
+  eventData: {
+    affected?: any[];
+    filter?: any[];
+    updateOperation?: any;
+    count?: number;
+    ids?: string[];
+  };
+}
+
+export type RealtimeFunction = (data: DatabaseEvent) => void;

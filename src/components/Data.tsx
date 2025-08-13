@@ -1,5 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { type Document } from "../types/types";
+import {
+  type Document,
+  type DatabaseEvent,
+  type RealtimeFunction,
+} from "../types/types";
 import { Box } from "@mui/material";
 import CollectionMenu from "./CollectionMenu";
 import DocumentTable from "./DocumentTable";
@@ -62,54 +66,79 @@ function Data() {
     });
   };
 
-  useEffect(() => {
-  const fetchDocuments = async () => {
-    if (!activeCollection || activeCollection.trim() === "") {
-      setDocuments([]);
-      setColumns([]);
-      return;
-    }
+  const updateDocuments: RealtimeFunction = (data: DatabaseEvent) => {
+    const { action, eventData } = data;
 
-    try {
-      const response = await client.db.getAll(activeCollection);
-      if (response.success) {
-        const dataArray = Array.isArray(response.data) ? response.data : [];
-        setColumns(getAllColumns(dataArray));
-        setDocuments(dataArray);
-      } else {
-        setColumns([]);
+    switch (action) {
+      case "insert":
+        setDocuments((prev) => [...(eventData.affected || []), ...prev]);
+        break;
+      case "update":
+        setDocuments((prev) =>
+          prev.map((doc) =>
+            eventData.ids!.includes(doc._id)
+              ? eventData.affected!.find((d) => d._id === doc._id)
+              : doc,
+          ),
+        );
+        break;
+      case "delete":
+        setDocuments((prev) =>
+          prev.filter((doc) => !eventData.ids!.includes(doc._id)),
+        );
+    }
+  };
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      if (!activeCollection || activeCollection.trim() === "") {
         setDocuments([]);
+        setColumns([]);
+        return;
       }
-    } catch (error) {
-      console.error("Error in fetchDocuments:", error);
-      setDocuments([]);
-      setColumns([]);
-    }
-  };
 
-  fetchDocuments();
-}, [activeCollection, client]);
+      try {
+        const response = await client.db.getAll(activeCollection);
+        if (response.success) {
+          const dataArray = Array.isArray(response.data) ? response.data : [];
+          setColumns(getAllColumns(dataArray));
+          setDocuments(dataArray);
+        } else {
+          setColumns([]);
+          setDocuments([]);
+        }
+      } catch (error) {
+        console.error("Error in fetchDocuments:", error);
+        setDocuments([]);
+        setColumns([]);
+      }
+    };
+
+    fetchDocuments();
+    client.realtime.subscribe(activeCollection, updateDocuments);
+    return () => client.realtime.unsubscribe(activeCollection, updateDocuments);
+  }, [activeCollection, client]);
 
   useEffect(() => {
-  const fetchCollections = async () => {
-    try {
-      const response = await client.getAllCollections();
-      if (response.success) {
-        const collections = response.data.collections.sort();
-        setCollections(collections);
-        setActiveCollection(collections[0] || "");
-      } else {
-        throw new Error(response.error);
+    const fetchCollections = async () => {
+      try {
+        const response = await client.getAllCollections();
+        if (response.success) {
+          const collections = response.data.collections.sort();
+          setCollections(collections);
+          setActiveCollection(collections[0] || "");
+        } else {
+          throw new Error(response.error);
+        }
+      } catch (error) {
+        console.error("Error fetching collections:", error);
+        setCollections([]);
+        setActiveCollection("");
       }
-    } catch (error) {
-      console.error("Error fetching collections:", error);
-      setCollections([]);
-      setActiveCollection("");
-    }
-  };
+    };
 
-  fetchCollections();
-}, [client]);
+    fetchCollections();
+  }, [client]);
 
   return (
     <Box
