@@ -85,21 +85,6 @@ export default defineConfig({
 });
 ```
 
-## Component Architecture
-App.tsx
-├── Header.tsx                     # Top navigation
-├── Sidebar Components/
-│   ├── ExpandedSidebar.tsx        # Full navigation menu
-│   └── CollapsedSidebar.tsx       # Minimized navigation
-├── Pages/
-│   ├── Data.tsx                   # Data management interface
-│   ├── Users.tsx                  # User management
-│   └── Logs.tsx                   # System monitoring
-└── Drawers/
-    ├── AddDocumentDrawer.tsx      # Document creation
-    ├── EditDocumentDrawer.tsx     # Document editing
-    └── EditPermissionsDrawer.tsx  # Permission management
-
 ## API Integration
 The UI connects to Pendulum backend services:
 
