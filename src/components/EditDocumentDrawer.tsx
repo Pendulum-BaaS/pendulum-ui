@@ -20,7 +20,14 @@ interface EditDocumentDrawerProps {
   setDocuments: React.Dispatch<React.SetStateAction<Document[]>>;
 }
 
-const EXCLUDED_FIELDS = ["_id", "createdAt", "createdBy", "updatedAt"];
+const EXCLUDED_FIELDS = [
+  "_id",
+  "createdAt",
+  "createdBy",
+  "updatedAt",
+  "updatedBy",
+  "userId",
+];
 
 export default function EditDocumentDrawer({
   isEditDocument,
@@ -90,8 +97,44 @@ export default function EditDocumentDrawer({
     setTextFieldContent(event.target.value);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const textarea = event.target as HTMLTextAreaElement;
+    const { selectionStart, selectionEnd, value } = textarea;
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      const beforeTab = value.substring(0, selectionStart);
+      const afterTab = value.substring(selectionEnd);
+      const newValue = beforeTab + '  ' + afterTab; // 2 spaces
+      setTextFieldContent(newValue);
+
+      setTimeout(() => {
+        textarea.setSelectionRange(selectionStart + 2, selectionStart + 2);
+      }, 0);
+    }
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const lines = value.substring(0, selectionStart).split('\n');
+      const currentLine = lines[lines.length - 1];
+      const indent = currentLine.match(/^\s*/)?.[0] || '';
+      const extraIndent = currentLine.trim().endsWith('{') || currentLine.trim().endsWith('[') ? '  ' : '';
+      
+      const beforeEnter = value.substring(0, selectionStart);
+      const afterEnter = value.substring(selectionEnd);
+      const newValue = beforeEnter + '\n' + indent + extraIndent + afterEnter;
+      setTextFieldContent(newValue);
+      
+      setTimeout(() => {
+        const newPosition = selectionStart + 1 + indent.length + extraIndent.length;
+        textarea.setSelectionRange(newPosition, newPosition);
+      }, 0);
+    }
+  };
+
   const lines = textFieldContent.split("\n");
-  const lineNumbers = lines.map((_, idx) => idx + 1).join("\n");
+  const lineNumbers = lines.map((_, idx) => {
+    return (idx + 1).toString().padStart(2, " ");
+  }).join("\n");
 
   useEffect(() => {
     if (isEditDocument && selectedDocument) {
@@ -180,6 +223,7 @@ export default function EditDocumentDrawer({
               onChange={handleChange}
               multiline
               variant="outlined"
+              onKeyDown={handleKeyDown}
               sx={{
                 flex: 1,
                 "& .MuiOutlinedInput-root": {

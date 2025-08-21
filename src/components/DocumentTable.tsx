@@ -94,8 +94,21 @@ export default function DataTable({
     try {
       const response = await client.deleteCollection(activeCollection);
       if (response.success) {
-        setCollections((prev) => prev.filter((p) => p !== activeCollection));
-        setActiveCollection(collections[0]);
+        setDocuments([]);
+        setColumns([]);
+
+        const remainingCollections = collections.filter(collection => {
+          return collection !== activeCollection;
+        });
+
+        setCollections(remainingCollections);
+
+        if (remainingCollections.length > 0) {
+          setActiveCollection(remainingCollections[0]);
+        } else {
+          setActiveCollection("");
+        }
+
         handleMenuClose();
       } else {
         throw new Error(response.error);
