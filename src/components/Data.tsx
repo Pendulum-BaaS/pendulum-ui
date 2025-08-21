@@ -86,8 +86,20 @@ function Data() {
         setDocuments((prev) =>
           prev.filter((doc) => !eventData.ids!.includes(doc._id)),
         );
+        break;
     }
   };
+
+  useEffect(() => {
+    if (documents.length > 0) {
+      const newColumns = getAllColumns(documents);
+      if (JSON.stringify(newColumns) !== JSON.stringify(columns)) {
+        setColumns(newColumns);
+      }
+    } else {
+      if (columns.length > 0) setColumns([]);
+    }
+  }, [documents]);
 
   useEffect(() => {
     const fetchDocuments = async () => {
